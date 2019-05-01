@@ -1,0 +1,23 @@
+{
+  "name": "nodebird-front",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "author": "joonak",
+  "license": "ISC",
+  "dependencies": {
+    "antd": "^3.16.6",
+    "next": "^8.1.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.0",
+    "webpack": "^4.30.0"
+  }
+}
