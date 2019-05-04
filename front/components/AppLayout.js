@@ -1,6 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import { Menu, Input, Button } from 'antd';
+import { Menu, Input, Button, Row, Col, Card, Avatar, Form } from 'antd';
+import PropTypes from 'prop-types';
+import LoginForm from './LoginForm';
+import UserProfile from './UserProfile';
+
+const dummy = { isLoggedIn: true };
 
 const AppLayout = ({ children }) => {
   return (
@@ -12,10 +17,29 @@ const AppLayout = ({ children }) => {
           <Input.Search enterButton style={{ verticalAlign: 'middle' }} />
         </Menu.Item>
       </Menu>
-      <Link href="/signup"><a><Button>회원가입</Button></a></Link>
-      {children}
+      <Row gutter={16} style={{ margin: '10px' }}>
+        <Col xs={24} md={6}>
+          {
+            dummy.isLoggedIn
+              ? <UserProfile />
+              : <LoginForm />
+          }
+        </Col>
+        <Col xs={24} md={12}>
+          {children}
+        </Col>
+        <Col xs={24} md={6}>
+          <Link href="https://joonhak.github.io/react-blog">
+            <a target="_blank">Blog</a>
+          </Link>
+        </Col>
+      </Row>
     </div>
   );
+};
+
+AppLayout.propTypes = {
+  children: PropTypes.node,
 };
 
 export default AppLayout;
