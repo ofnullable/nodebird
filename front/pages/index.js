@@ -1,25 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
-
-const dummy = {
-  isLoggedIn: true,
-  mainPosts: [{
-    User: {
-      id: 1,
-      nickname: 'joonak',
-    },
-    content: '첫번째 게시글',
-    img: 'http://img.worksout.co.kr/upload/image/editor/20190430/201904301054390291.jpg',
-    createdAt: Date.now(),
-  }]
-};
+import { useDispatch, useSelector } from 'react-redux';
+import { loginAction } from '../reducers/user';
+import { addDummy } from '../reducers/post';
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector(state => state.user);
+  const { mainPosts } = useSelector(state => state.post);
+
+  useEffect(() => {
+    dispatch(loginAction);
+    dispatch(addDummy);
+  }, []);
   return (
     <>
-      {dummy.isLoggedIn && <PostForm />}
-      {dummy.mainPosts.map((p, i) => {
+      {isLoggedIn && <PostForm />}
+      {mainPosts.map((p) => {
         return (
           <PostCard key={`${p.content}`} post={p} />
         );
