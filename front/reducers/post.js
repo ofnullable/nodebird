@@ -8,10 +8,13 @@ export const initialState = {
         img: 'http://img.worksout.co.kr/upload/image/editor/20190430/201904301054390291.jpg',
         createdAt: Date.now(),
     }],
+    imagePaths: [],
 };
 
-export const ADD_POST = 'ADD_POST';
 export const ADD_DUMMY = 'ADD_DUMMY';
+export const ADD_POST = 'ADD_POST';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
 export const addPost = {
     type: ADD_POST,

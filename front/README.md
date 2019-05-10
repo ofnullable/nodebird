@@ -45,3 +45,19 @@
   * Redux의 hooks를 사용하려면 `v7.1.0` 이상을 사용해야 한다!!
   * Redux가 관리할 state를 group으로 나눠서 관리하면 관리 및 사용이 용이하다!
 * 일단 Hooks로 사용하는 예제? 정도 배워봤는데 기존 class component에서는 어떻게 썼었지..
+<br/>
+
+# 4일차
+* `Redux`의 Action에서 동적인 data 처리
+  * Action을 함수로 만들어 parameter를 통해 data를 만든다.
+* `Generator`
+  * 무한을 control (?)
+  * iterator를 control 한다..?
+  * 코드 실행을 제어한다고 생각하면 되는건가..
+* `Redux-saga`
+  * Why?
+    * `Redux`는 Action을 동기적으로 처리한다.
+    * 하지만, server와 통신할때에는 비동기 처리가 훨씬 많이 필요함
+    * 따라서 `Redux-saga`라는 Middleware를 활용해서 비동기 동작을 처리한다..
+  * `Redux`의 특정 Action이 실행되는걸 `watch`하게 해놓는다.
+  * `watch`하고 있는 Action이 실행될 때 비동기 요청을 실행한다.
