@@ -2,13 +2,21 @@ import React, { useCallback, memo } from 'react';
 import Link from 'next/link';
 import { Form, Input, Button } from 'antd';
 import { useInputText } from '../pages/signup';
+import { useDispatch } from 'react-redux';
+import { signInAction } from '../reducers/user';
 
-const LoginForm = memo(() => {
+const SignInForm = memo(() => {
+
     const [id, onChangeId] = useInputText('');
     const [passwd, onChangePasswd] = useInputText('');
+    const dispatch = useDispatch();
 
     const onSubmitForm = useCallback((e) => {
         e.preventDefault();
+        dispatch(signInAction({
+            id,
+            passwd,
+        }));
     }, [id, passwd]);
 
     return (
@@ -31,4 +39,4 @@ const LoginForm = memo(() => {
     );
 });
 
-export default LoginForm;
+export default SignInForm;
