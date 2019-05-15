@@ -10,62 +10,63 @@ export const initialState = {
     user: null,
 };
 
-export const SIGN_UP = 'SIGN_UP';  // Action의 이름
+export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';  // Action의 이름
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
-export const SIGN_IN = 'SIGN_IN';
+
+export const SIGN_IN_REQUEST = 'SIGN_IN_REQUEST';
 export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 export const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE';
-export const SIGN_OUT = 'SIGN_OUT';
+
+export const SIGN_OUT_REQUEST = 'SIGN_OUT_REQUEST';
+export const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS';
+export const SIGN_OUT_FAILURE = 'SIGN_OUT_FAILURE';
 
 // 동적인 data는 함수로 action을 return한다.
 export const signUpAction = (data) => {
     return {
-        type: SIGN_UP,
+        type: SIGN_UP_REQUEST,
         data: data,
     };
 };
 
-export const signUpSuccess = {
-    type: SIGN_UP_SUCCESS,
-};
-
-export const signUpFailure = {
-    type: SIGN_UP_FAILURE,
-};
-
 export const signInAction = (data) => {
     return {
-        type: SIGN_IN,
+        type: SIGN_IN_REQUEST,
         data: dummyUser,
     };
 };
 
 export const signOutAction = {
-    type: SIGN_OUT,
+    type: SIGN_OUT_REQUEST,
 };
 
 // reducer, setState와 비슷하다고 생각하면 된다.
 export default (state = initialState, action) => {
     switch (action.type) {
-        case SIGN_UP:
+        case SIGN_UP_REQUEST:
             return {
                 ...state,
                 signUpData: action.data,
+                isLoading: true,
             };
-        case SIGN_IN:
+        case SIGN_IN_REQUEST:
             return {
                 ...state,
                 isSignIn: true,
                 user: action.data,
+                isLoading: true,
             };
-        case SIGN_OUT:
+        case SIGN_OUT_REQUEST:
             return {
                 ...state,
                 isSignIn: false,
                 user: null,
+                isLoading: true,
             };
         default:
-            return state;
+            return {
+                ...state
+            };
     };
 };

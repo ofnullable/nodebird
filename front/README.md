@@ -59,5 +59,39 @@
     * `Redux`는 Action을 동기적으로 처리한다.
     * 하지만, server와 통신할때에는 비동기 처리가 훨씬 많이 필요함
     * 따라서 `Redux-saga`라는 Middleware를 활용해서 비동기 동작을 처리한다..
-  * `Redux`의 특정 Action이 실행되는걸 `watch`하게 해놓는다.
-  * `watch`하고 있는 Action이 실행될 때 비동기 요청을 실행한다.
+  * `Redux`의 특정 Action이 Dispatch되는걸 `watch`하게 해놓는다.
+  * `watch`하고 있는 Action이 Dispatch 될 때 비동기 요청을 실행한다.
+<br/>
+
+# 5일차
+* `Generator`
+  * `코드의 실행 제어기` 라고 생각하면 될거같다.
+  * `yield` 키워드가 중단점 역할을 한다.
+  * `yield*`은 뒤에 오는 값을 iterable로 처리하겠다는 의미이다.
+  * ```js
+    funtion* gen() {
+      yield 1;
+      yield 2;
+      yield 3;
+      yield* [1, 2, 3]; // 위 세 라인과 같은 의미
+    }
+    ```
+* `Redux-saga`
+  * `take()`
+    * 인자로 받는 Action이 Dispatch 되길 기다린다고 명시하는것
+    * `while (true) {}`안에 `take()`를 넣어줘야 여러번 수행할 수 있다.
+    * Action이 Dispatch되는 횟수를 제한하고 싶으면 for loop를 통해 제어할 수 있다.
+    * But, `Redux`와 `Redux-saga`는 별개로 동작한다..
+    * => `Redux-saga`의 `take()`가 수행되지 않더라도 `Redux`의 Action은 Dispatch된다는 의미
+  * `put()`
+    * `Redux`의 Dispatch와 같은 역할
+  * `takeLatest()`, `takeEvery()`
+    * `while (true) {}`를 생략시킬 수 있게한다?
+    * `takeEvery()`는 모든 요청을 수행하는것을 의미한다.
+    * `takeLatest()`는 동시에 여러 요청이 발생했을 때 마지막 하나의 요청만 처리하는것을 의미한다.
+  * `fork()`, `call()`
+    * 둘 다 함수를 실행하는 역할을 한다.
+    * `call()`은 동기 호출, `fork()`는 비동기 호출
+<br/>
+
+# 6일차
