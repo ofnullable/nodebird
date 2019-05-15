@@ -3,7 +3,7 @@ import { SIGN_IN_REQUEST, SIGN_IN_SUCCESS, SIGN_IN_FAILURE } from '../reducers/u
 
 function signInApi() {
     // server에 요청
-    console.log('Sign in request..')
+    console.log('Sign in request..');
 }
 
 function* signIn() {
@@ -34,4 +34,4 @@ export default function* userSage() {
         fork(watchSignIn),
         fork(watchSignUp),
     ]);
-}
+};
