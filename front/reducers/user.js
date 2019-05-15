@@ -20,6 +20,8 @@ export const initialState = {
     userInfo: null,        // 다른사람의 정보
 };
 
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+
 export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';  // Action의 이름
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
@@ -51,8 +53,6 @@ export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE';
 export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST';
 export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
 export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
-
-export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
 // 동적인 data는 함수로 action을 return한다.
 // export const signUpRequestAction = data => ({

@@ -40,8 +40,6 @@ const dummyComment = {
     createdAt: Date.now(),
 }
 
-export const ADD_DUMMY = 'ADD_DUMMY';
-
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
 export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
