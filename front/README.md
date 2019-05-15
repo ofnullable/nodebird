@@ -22,7 +22,7 @@
   * 함수를 props로 전달하는 경우에는 useCallback 꼭 써라
     * 지금은 알겠는데 나중엔 까먹을듯..
     * Event Handler등을 전달할 때 주의할것
-  * `<Form/>`은 꼭 분리해주는것이 좋다.
+  * `<Form/>`은 꼭 component로 분리해주는것이 좋다.
   * 어차피 `<input/>`에 Custom hooks 적용할거면 인풋단위 최적화가 가능하긴.. 할거같다~~ㅠ~~
 * `PropTypes`
   * PropTypes를 활용해서 부모 component를 통해 받는 props의 타입을 지정할 수 있다.
@@ -36,14 +36,14 @@
     * 흩어져있는 state들을 한곳에서 관리한다면?
     * 안정성의 증가 및 state의 관리 및 통제가 용이해진다!
   <!-- * 기본 구조 ( initialState ) -->
-  * Store => 모아놓은 state들, action을 통해서만 변경할 수 있다.
-  * Action => state를 바꾸는 행동 자체를 말한다.
-  * Dispatch => action을 실행시키는것
-    * `Action을 Dispatch해야 state가 변경된다`
-  * Reducer => Action의 결과로 state를 어떻게 바꿀지 정의해놓은것
+  * `Store` => 모아놓은 state들, action을 통해서만 변경할 수 있다.
+  * `Action` => state를 바꾸는 행동 자체를 말한다.
+  * `Dispatch` => action을 실행시키는것
+    * `Action`을 `Dispatch`해야 state가 변경된다
+  * `Reducer` => Action의 결과로 state를 어떻게 바꿀지 정의해놓은것
     * () => `foo`라는 state의 값을 `bar`로 변경해라! 
   * Redux의 hooks를 사용하려면 `v7.1.0` 이상을 사용해야 한다!!
-  * Redux가 관리할 state를 group으로 나눠서 관리하면 관리 및 사용이 용이하다!
+  * Redux가 관리할 state를 group으로 나눠서 관리하면 관리 및 사용이 용이하다.
 * 일단 Hooks로 사용하는 예제? 정도 배워봤는데 기존 class component에서는 어떻게 썼었지..
 <br/>
 
@@ -95,3 +95,14 @@
 <br/>
 
 # 6일차
+* DummyData를 활용하여 `Redux, Redux-saga`적용
+  * `Redux, Redux-saga`의 흐름 정리
+    * `Redux`를 통해 initial state 및 Action들과 reducer들을 정의
+    * `Redux-saga`에서 특정 Action을 watch하게 한다. ( `EventListener`와 비슷한 느낌 )
+    * Action이 Dispatch될 때 특정 api호출을 시도하고, 결과에 따른 Action을 수행한다.
+  * 사용 방법은?
+    * component가 mount될 때, 이벤트 발생시 `Redux-saga`가 watch하고있는 Action을 Dispatch한다.
+    * 작성해놓은 코드에 따라 `Redux, Redux-saga`가 state를 변경한다.
+    * 이후 변경된 state를 활용해 화면을 그린다.
+  * ~~아니.. 해야될게 너무 많아..~~
+<br/>

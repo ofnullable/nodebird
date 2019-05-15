@@ -9,9 +9,6 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isSignIn) {
-      dispatch(addDummy);
-    }
     // dispatch(signinAction);
   }, []);
 
