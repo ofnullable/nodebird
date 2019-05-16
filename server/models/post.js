@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             content: {
                 type: DataTypes.STRING(140),
-                allowNullL: false,
+                allowNull: false,
             },
         }, {
             charset: 'utf8mb4',

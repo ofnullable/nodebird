@@ -102,7 +102,7 @@ export default (state = initialState, action) => {
         case SIGN_IN_SUCCESS:
             return {
                 ...state,
-                me: dummyUser,
+                me: action.data,
                 isSignIn: true,
                 isLoading: false,
                 isSigningIn: false,

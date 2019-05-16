@@ -17,7 +17,8 @@ const SignInForm = memo(() => {
         dispatch({
             type: SIGN_IN_REQUEST,
             data: {
-                id, passwd,
+                userId: id,
+                passwd,
             },
         });
     }, [id, passwd]);

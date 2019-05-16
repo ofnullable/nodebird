@@ -106,3 +106,7 @@
     * 이후 변경된 state를 활용해 화면을 그린다.
   * ~~아니.. 해야될게 너무 많아..~~
 <br/>
+
+# 7일차
+* `axios`를 활용한 Server와 통신
+  * `Redux-saga`에서 특정 Action이 실행 될 때 `axios`를 활용하여 Server에 xhr 요청을 보낸다.

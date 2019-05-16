@@ -43,12 +43,12 @@ const Signup = () => {
     dispatch({
       type: SIGN_UP_REQUEST,
       data: {
-        id,
+        userId: id,
+        nickname: nick,
         passwd,
-        nick,
       }
     });
-  }, [passwd, passwdCheck, term]);
+  }, [id, nick, passwd, passwdCheck, term]);
 
   /*
   const onChangeId = (e) => {
