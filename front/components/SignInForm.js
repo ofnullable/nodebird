@@ -1,22 +1,26 @@
 import React, { useCallback, memo } from 'react';
 import Link from 'next/link';
 import { Form, Input, Button } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import { useInputText } from '../pages/signup';
-import { useDispatch } from 'react-redux';
-import { signInAction } from '../reducers/user';
+import { SIGN_IN_REQUEST } from '../reducers/user';
 
 const SignInForm = memo(() => {
 
     const [id, onChangeId] = useInputText('');
     const [passwd, onChangePasswd] = useInputText('');
+    const { isSigningIn } = useSelector(state => state.user);
     const dispatch = useDispatch();
 
     const onSubmitForm = useCallback((e) => {
         e.preventDefault();
-        dispatch(signInAction({
-            id,
-            passwd,
-        }));
+        dispatch({
+            type: SIGN_IN_REQUEST,
+            data: {
+                userId: id,
+                passwd,
+            },
+        });
     }, [id, passwd]);
 
     return (
@@ -32,7 +36,7 @@ const SignInForm = memo(() => {
                 <Input name="passwd" value={passwd} onChange={onChangePasswd} type="password" required />
             </div>
             <div style={{ marginTop: '10px' }}>
-                <Button type="primary" htmlType="submit" loading={false}>로그인</Button>
+                <Button type="primary" htmlType="submit" loading={isSigningIn}>로그인</Button>
                 <Link href="/signup"><a><Button>회원가입</Button></a></Link>
             </div>
         </Form>
