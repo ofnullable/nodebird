@@ -10,12 +10,6 @@
     "browser": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
-  "plugins": [
-    "import",
-    "react-hooks"
-  ]
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "plugins": ["import", "react-hooks"]
 }
