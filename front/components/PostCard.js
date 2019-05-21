@@ -1,9 +1,26 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Card, Icon, Button, Avatar, Form, Input, List, Comment } from 'antd';
+import {
+  Card,
+  Icon,
+  Button,
+  Avatar,
+  Form,
+  Input,
+  List,
+  Comment,
+  Popover,
+} from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { ADD_COMMENT_REQUEST, LOAD_COMMENTS_REQUEST } from '../reducers/post';
+
+import {
+  ADD_COMMENT_REQUEST,
+  LOAD_COMMENTS_REQUEST,
+  LIKE_POST_REQUEST,
+  UNLIKE_POST_REQUEST,
+} from '../reducers/post';
+import PostImages from './PostImages';
 
 const PostCard = ({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -11,6 +28,8 @@ const PostCard = ({ post }) => {
   const { me } = useSelector(state => state.user);
   const { commentAdded, isAddingComment } = useSelector(state => state.post);
   const dispatch = useDispatch();
+
+  const liked = me && post.Likers && post.Likers.find(l => l.id === me.id);
 
   useEffect(() => {
     setCommentText('');
@@ -21,7 +40,7 @@ const PostCard = ({ post }) => {
       if (!prev) {
         dispatch({
           type: LOAD_COMMENTS_REQUEST,
-          data: post.id,
+          postId: post.id,
         });
       }
       return !prev;
@@ -49,16 +68,55 @@ const PostCard = ({ post }) => {
     setCommentText(e.target.value);
   }, []);
 
+  const toggleLike = useCallback(() => {
+    if (!me) {
+      return alert('Sign in first!');
+    }
+    if (liked) {
+      return dispatch({
+        type: UNLIKE_POST_REQUEST,
+        data: post.id,
+      });
+    } else {
+      return dispatch({
+        type: LIKE_POST_REQUEST,
+        data: post.id,
+      });
+    }
+  }, [me && me.id, post && post.id, liked]);
+
   return (
     <div>
       <Card
         key={post.createdAt}
-        cover={post.img && <img alt="example" src={post.img} />}
+        cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
-          <Icon type="retweet" key="retweet" />,
-          <Icon type="heart" key="heart" />,
-          <Icon type="message" key="message" onClick={onToggleCommentForm} />,
-          <Icon type="ellipsis" key="ellipsis" />,
+          <Icon type='retweet' key='retweet' />,
+          <Icon
+            type='heart'
+            key='heart'
+            onClick={toggleLike}
+            theme={liked ? 'twoTone' : 'outlined'}
+            twoToneColor='#eb2f96'
+          />,
+          <Icon type='message' key='message' onClick={onToggleCommentForm} />,
+          <Popover
+            key='ellipsis'
+            content={
+              <Button.Group>
+                {me && post.UserId === me.id ? (
+                  <div>
+                    <Button>수정</Button>
+                    <Button type='danger'>삭제</Button>
+                  </div>
+                ) : (
+                  <Button type='danger'>신고</Button>
+                )}
+              </Button.Group>
+            }
+          >
+            <Icon type='ellipsis' />
+          </Popover>,
         ]}
         extra={<Button>팔로우</Button>}
       >
@@ -107,13 +165,13 @@ const PostCard = ({ post }) => {
                 onChange={onChangeCommentText}
               />
             </Form.Item>
-            <Button type="primary" htmlType="submit" loading={isAddingComment}>
+            <Button type='primary' htmlType='submit' loading={isAddingComment}>
               삐약
             </Button>
           </Form>
           <List
             header={`${post.Comments ? post.Comments.length : 0} 댓글`}
-            itemLayout="horizontal"
+            itemLayout='horizontal'
             dataSource={post.Comments || []}
             renderItem={item => (
               <li>

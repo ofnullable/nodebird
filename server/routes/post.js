@@ -1,9 +1,29 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+
 const db = require('../models');
 const { isSignIn } = require('./middleware');
 const router = express.Router();
 
-router.post('/', isSignIn, async (req, res, next) => {
+const upload = multer({
+  // server에 저장.
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, 'uploads');
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, ext);
+      cb(null, basename + new Date().valueOf() + ext);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
+// upload.fields([{ name: 'image' }, { name: 'and' }, { name: 'something' }]);
+
+router.post('/', isSignIn, upload.none(), async (req, res, next) => {
+  // 여기서 업로드하는게 아니기 때문에 upload.none()
   try {
     const hashtags = req.body.content.match(/#[^\s]+/g);
     const newPost = await db.Post.create({
@@ -20,6 +40,21 @@ router.post('/', isSignIn, async (req, res, next) => {
       );
       await newPost.addHashtags(result.map(r => r[0]));
     }
+
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        const images = await Promise.all(
+          req.body.image.map(i => {
+            return db.Image.create({ src: i });
+          }),
+        );
+        await newPost.addImages(images);
+      } else {
+        const image = await db.Image.create({ src: req.body.image });
+        await newPost.addImage(image);
+      }
+    }
+
     // const user = await newPost.getUser();
     // newPost.User = user;
     // res.json(newPost);
@@ -29,6 +64,9 @@ router.post('/', isSignIn, async (req, res, next) => {
         {
           model: db.User,
           attribute: ['id', 'userId', 'nickname'],
+        },
+        {
+          model: db.Image,
         },
       ],
     });
@@ -93,7 +131,38 @@ router.post('/:id/comment', isSignIn, async (req, res, next) => {
   }
 });
 
-router.post('/images', (req, res) => {});
+router.post('/images', upload.array('image'), (req, res) => {
+  return res.json(req.files.map(v => v.filename));
+});
+
+router.post('/:id/like', isSignIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({ where: { id: req.params.id } });
+    if (!post) {
+      return res.status(404).send('Post not found');
+    }
+    await post.addLiker(req.user.id);
+    return res.json({ userId: req.user.id });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.delete('/:id/like', isSignIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({ where: { id: req.params.id } });
+    if (!post) {
+      return res.status(404).send('Post not found');
+    }
+    await post.removeLiker(req.user.id);
+    return res.json({ userId: req.user.id });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
 router.get('/:id', (req, res) => {});
 
 module.exports = router;

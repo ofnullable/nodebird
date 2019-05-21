@@ -58,6 +58,16 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case UPLOAD_IMAGES_SUCCESS:
+      return {
+        ...state,
+        imagePaths: [...state.imagePaths, ...action.data],
+      };
+    case REMOVE_IMAGE:
+      return {
+        ...state,
+        imagePaths: state.imagePaths.filter((v, i) => i !== action.index),
+      };
     case ADD_POST_REQUEST:
       return {
         ...state,
@@ -71,6 +81,7 @@ export default (state = initialState, action) => {
         postAdded: true,
         isAddingPost: false,
         mainPosts: [action.data, ...state.mainPosts],
+        imagePaths: [],
       };
     case ADD_POST_FAILURE:
       return {
@@ -92,12 +103,6 @@ export default (state = initialState, action) => {
         ...state,
         mainPosts: action.data,
       };
-    // case LOAD_MAIN_POSTS_FAILURE:
-    // case LOAD_USER_POSTS_FAILURE:
-    // case LOAD_HASHTAG_POSTS_FAILURE:
-    //   return {
-    //     ...state,
-    //   };
     case LOAD_COMMENTS_SUCCESS: {
       const postIndex = state.mainPosts.findIndex(
         v => v.id === action.data.postId,
@@ -139,6 +144,32 @@ export default (state = initialState, action) => {
         isAddingComment: false,
         addCommentErrorReason: action.error,
       };
+    case LIKE_POST_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(
+        v => v.id === action.data.postId,
+      );
+      const post = state.mainPosts[postIndex];
+      const Likers = [{ id: action.data.userId }, ...post.Likers];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, Likers };
+      return {
+        ...state,
+        mainPosts,
+      };
+    }
+    case UNLIKE_POST_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(
+        v => v.id === action.data.postId,
+      );
+      const post = state.mainPosts[postIndex];
+      const Likers = post.Likers.filter(v => v.id !== action.data.userId);
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, Likers };
+      return {
+        ...state,
+        mainPosts,
+      };
+    }
     default:
       return {
         ...state,

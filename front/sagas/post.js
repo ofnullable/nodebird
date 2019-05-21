@@ -19,7 +19,43 @@ import {
   ADD_COMMENT_REQUEST,
   ADD_COMMENT_SUCCESS,
   ADD_COMMENT_FAILURE,
+  UPLOAD_IMAGES_REQUEST,
+  UPLOAD_IMAGES_SUCCESS,
+  UPLOAD_IMAGES_FAILURE,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAILURE,
+  LIKE_POST_REQUEST,
+  UNLIKE_POST_REQUEST,
+  UNLIKE_POST_SUCCESS,
+  UNLIKE_POST_FAILURE,
 } from '../reducers/post';
+
+function uploadImagesApi(formData) {
+  return axios.post(`/post/images`, formData, {
+    withCredentials: true,
+  });
+}
+
+function* uploadImages(action) {
+  try {
+    // file path들을 받음
+    const result = yield call(uploadImagesApi, action.data);
+    yield put({
+      type: UPLOAD_IMAGES_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: UPLOAD_IMAGES_FAILURE,
+      error: e,
+    });
+    console.error(e);
+  }
+}
+
+function* watchUploadImages() {
+  yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
 
 function addPostApi(postData) {
   return axios.post('/post', postData, {
@@ -179,13 +215,80 @@ function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
 
+function likePostApi(postId) {
+  return axios.post(
+    `/post/${postId}/like`,
+    {},
+    {
+      withCredentials: true,
+    },
+  );
+}
+
+function* likePost(action) {
+  try {
+    // file path들을 받음
+    const result = yield call(likePostApi, action.data);
+    yield put({
+      type: LIKE_POST_SUCCESS,
+      data: {
+        userId: result.data.userId,
+        postId: action.data,
+      },
+    });
+  } catch (e) {
+    yield put({
+      type: LIKE_POST_FAILURE,
+      error: e,
+    });
+    console.error(e);
+  }
+}
+
+function* watchLikePost() {
+  yield takeLatest(LIKE_POST_REQUEST, likePost);
+}
+
+function unlikePostApi(postId) {
+  return axios.delete(`/post/${postId}/like`, {
+    withCredentials: true,
+  });
+}
+
+function* unlikePost(action) {
+  try {
+    // file path들을 받음
+    const result = yield call(unlikePostApi, action.data);
+    yield put({
+      type: UNLIKE_POST_SUCCESS,
+      data: {
+        userId: result.data.userId,
+        postId: action.data,
+      },
+    });
+  } catch (e) {
+    yield put({
+      type: UNLIKE_POST_FAILURE,
+      error: e,
+    });
+    console.error(e);
+  }
+}
+
+function* watchUnlikePost() {
+  yield takeLatest(UNLIKE_POST_REQUEST, unlikePost);
+}
+
 export default function* postSaga() {
   yield all([
+    fork(watchUploadImages),
     fork(watchAddPost),
     fork(watchLoadMainPosts),
     fork(watchLoadUserPosts),
     fork(watchLoadHashtagPosts),
     fork(watchLoadComments),
     fork(watchAddComment),
+    fork(watchLikePost),
+    fork(watchUnlikePost),
   ]);
 }
