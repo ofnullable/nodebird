@@ -7,7 +7,7 @@ import { SIGN_UP_REQUEST } from '../reducers/user';
 // custom hooks
 export const useInputText = (initValue = null) => {
   const [value, setter] = useState(initValue);
-  const handler = useCallback((e) => {
+  const handler = useCallback(e => {
     setter(e.target.value);
   }, []);
   return [value, handler];
@@ -30,25 +30,28 @@ const Signup = () => {
     }
   }, [me && me.id]);
 
-  const onSubmit = useCallback((e) => {
-    e.preventDefault();
-    if (passwd !== passwdCheck) {
-      setPasswdError(true);
-      return;
-    }
-    if (!term) {
-      setTermError(true);
-      return
-    }
-    dispatch({
-      type: SIGN_UP_REQUEST,
-      data: {
-        userId: id,
-        nickname: nick,
-        passwd,
+  const onSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      if (passwd !== passwdCheck) {
+        setPasswdError(true);
+        return;
       }
-    });
-  }, [id, nick, passwd, passwdCheck, term]);
+      if (!term) {
+        setTermError(true);
+        return;
+      }
+      dispatch({
+        type: SIGN_UP_REQUEST,
+        data: {
+          userId: id,
+          nickname: nick,
+          passwd,
+        },
+      });
+    },
+    [id, nick, passwd, passwdCheck, term],
+  );
 
   /*
   const onChangeId = (e) => {
@@ -59,20 +62,29 @@ const Signup = () => {
     setNick(e.target.value);
   };
   */
-  const onChangePasswd = useCallback((e) => {
-    setPasswdError(e.target.value !== passwdCheck);
-    setPasswd(e.target.value);
-  }, [passwd, passwdCheck]);
+  const onChangePasswd = useCallback(
+    e => {
+      setPasswdError(e.target.value !== passwdCheck);
+      setPasswd(e.target.value);
+    },
+    [passwd, passwdCheck],
+  );
 
-  const onChangePasswdCheck = useCallback((e) => {
-    setPasswdError(e.target.value !== passwd);
-    setPasswdCheck(e.target.value);
-  }, [passwd, passwdCheck]);
+  const onChangePasswdCheck = useCallback(
+    e => {
+      setPasswdError(e.target.value !== passwd);
+      setPasswdCheck(e.target.value);
+    },
+    [passwd, passwdCheck],
+  );
 
-  const onChangeTerm = useCallback((e) => {
-    setTermError(false);
-    setTerm(e.target.checked);
-  }, [term]);
+  const onChangeTerm = useCallback(
+    e => {
+      setTermError(false);
+      setTerm(e.target.checked);
+    },
+    [term],
+  );
 
   return (
     <>
@@ -85,29 +97,54 @@ const Signup = () => {
         <div>
           <label htmlFor="user-nick">닉네임</label>
           <br />
-          <Input name="user-nick" value={nick} onChange={onChangeNick} required />
+          <Input
+            name="user-nick"
+            value={nick}
+            onChange={onChangeNick}
+            required
+          />
         </div>
         <div>
           <label htmlFor="user-passwd">비밀번호</label>
           <br />
-          <Input name="user-passwd" type="password" value={passwd} required onChange={onChangePasswd} />
+          <Input
+            name="user-passwd"
+            type="password"
+            value={passwd}
+            required
+            onChange={onChangePasswd}
+          />
         </div>
         <div>
           <label htmlFor="user-passwd-check">비밀번호 확인</label>
           <br />
-          <Input name="user-passwd-check" type="password" value={passwdCheck} required onChange={onChangePasswdCheck} />
-          {passwdError && <div style={{ color: 'red' }}>비밀번호가 일치하지 않습니다!</div>}
+          <Input
+            name="user-passwd-check"
+            type="password"
+            value={passwdCheck}
+            required
+            onChange={onChangePasswdCheck}
+          />
+          {passwdError && (
+            <div style={{ color: 'red' }}>비밀번호가 일치하지 않습니다!</div>
+          )}
         </div>
         <div>
-          <Checkbox name="user-term" value={term} onChange={onChangeTerm}>동의!</Checkbox>
-          {termError && <div style={{ color: 'red' }}>약관에 동의해주세요!</div>}
+          <Checkbox name="user-term" value={term} onChange={onChangeTerm}>
+            동의!
+          </Checkbox>
+          {termError && (
+            <div style={{ color: 'red' }}>약관에 동의해주세요!</div>
+          )}
         </div>
         <div style={{ marginTop: 10 }}>
-          <Button type="primary" htmlType="submit" loading={isSigningUp}>가입하기</Button>
+          <Button type="primary" htmlType="submit" loading={isSigningUp}>
+            가입하기
+          </Button>
         </div>
       </Form>
     </>
-  )
+  );
 };
 
 export default Signup;

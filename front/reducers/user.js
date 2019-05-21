@@ -1,28 +1,20 @@
-const dummyUser = {
-    id: 1,
-    nickname: 'jooonak',
-    Post: [''],
-    Followings: ['', '', ''],
-    Followers: ['', '', ''],
-};
 // store, state의 모양 정의 ( 초기값 )
 export const initialState = {
-    signedUp: false,       // 회원가입 성공
-    isSignIn: false,       // 로그인 여부
-    isSigningUp: false,    // 시도중
-    isSigningIn: false,
-    isSigningOut: false,
-    signInErrorReason: '', // 실패사유
-    signUpErrorReason: '',
-    me: null,
-    followingList: [],
-    followerList: [],
-    userInfo: null,        // 다른사람의 정보
+  signedUp: false, // 회원가입 성공
+  isSigningUp: false, // 시도중
+  isSigningIn: false,
+  isSigningOut: false,
+  signInErrorReason: '', // 실패사유
+  signUpErrorReason: '',
+  me: null,
+  followingList: [],
+  followerList: [],
+  userInfo: null, // 다른사람의 정보
 };
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
-export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';  // Action의 이름
+export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST'; // Action의 이름
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
 
@@ -59,72 +51,88 @@ export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 //     type: SIGN_UP_REQUEST,
 //     data: data,
 // });
-
 // export const signInRequestAction = data => ({
 //     type: SIGN_IN_REQUEST,
 //     data: dummyUser,
 // });
-
 // export const signOutAction = {
 //     type: SIGN_OUT_REQUEST,
 // };
 
 // reducer, setState와 비슷하다고 생각하면 된다.
 export default (state = initialState, action) => {
-    switch (action.type) {
-        case SIGN_UP_REQUEST:
-            return {
-                ...state,
-                signUpData: action.data,
-                isSignedUp: false,
-                isSigningUp: true,
-                signUpErrorReason: '',
-            };
-        case SIGN_UP_SUCCESS:
-            return {
-                ...state,
-                signUpData: action.data,
-                isSignedUp: true,
-                isSigningUp: false,
-            };
-        case SIGN_UP_FAILURE:
-            return {
-                ...state,
-                isSigningUp: false,
-                signUpErrorReason: action.error,
-            };
-        case SIGN_IN_REQUEST:
-            return {
-                ...state,
-                isSigningIn: true,
-                signInErrorReason: '',
-            };
-        case SIGN_IN_SUCCESS:
-            return {
-                ...state,
-                me: action.data,
-                isSignIn: true,
-                isLoading: false,
-                isSigningIn: false,
-            }
-        case SIGN_IN_FAILURE:
-            return {
-                ...state,
-                me: null,
-                isSignIn: false,
-                isSigningIn: false,
-                signInErrorReason: action.error,
-            }
-        case SIGN_OUT_REQUEST:
-            return {
-                ...state,
-                isSignIn: false,
-                me: null,
-                isLoading: true,
-            };
-        default:
-            return {
-                ...state
-            };
-    };
+  switch (action.type) {
+    case SIGN_UP_REQUEST:
+      return {
+        ...state,
+        signUpData: action.data,
+        isSignedUp: false,
+        isSigningUp: true,
+        signUpErrorReason: '',
+      };
+    case SIGN_UP_SUCCESS:
+      return {
+        ...state,
+        signUpData: action.data,
+        isSignedUp: true,
+        isSigningUp: false,
+      };
+    case SIGN_UP_FAILURE:
+      return {
+        ...state,
+        isSigningUp: false,
+        signUpErrorReason: action.error,
+      };
+    case SIGN_IN_REQUEST:
+      return {
+        ...state,
+        isSigningIn: true,
+        signInErrorReason: '',
+      };
+    case SIGN_IN_SUCCESS:
+      return {
+        ...state,
+        me: action.data,
+        isSigningIn: false,
+        isSigningIn: false,
+      };
+    case SIGN_IN_FAILURE:
+      return {
+        ...state,
+        me: null,
+        isSigningIn: false,
+        signInErrorReason: action.error,
+      };
+    case SIGN_OUT_REQUEST:
+      return {
+        ...state,
+        isSigningOut: true,
+      };
+    case SIGN_OUT_SUCCESS:
+      return {
+        ...state,
+        me: null,
+        isSigningOut: false,
+      };
+    case SIGN_OUT_FAILURE:
+      return {
+        ...state,
+        isSigningOut: false,
+      };
+    case LOAD_USER_SUCCESS:
+      if (action.me) {
+        return {
+          ...state,
+          me: action.data,
+        };
+      }
+      return {
+        ...state,
+        userInfo: action.data,
+      };
+    default:
+      return {
+        ...state,
+      };
+  }
 };
