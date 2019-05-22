@@ -20,16 +20,24 @@ import {
   LOAD_USER_REQUEST,
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE,
+  FOLLOW_USER_REQUEST,
+  FOLLOW_USER_SUCCESS,
+  FOLLOW_USER_FAILURE,
+  UNFOLLOW_USER_REQUEST,
+  UNFOLLOW_USER_SUCCESS,
+  UNFOLLOW_USER_FAILURE,
 } from '../reducers/user';
 
 function signUpApi(signUpData) {
+  // server에 요청
   return axios.post('/user/', signUpData);
 }
 
 function* signUp({ data }) {
   try {
-    yield call(signUpApi, data);
+    yield call(signUpApi, data); // server의 응답을 받기 위해 동기로 api 호출
     yield put({
+      // dispatch와 동일, Action이 실행된다.
       type: SIGN_UP_SUCCESS,
     });
   } catch (e) {
@@ -46,7 +54,6 @@ function* watchSignUp() {
 }
 
 function signInApi(signInData) {
-  // server에 요청
   return axios.post('/user/sign-in', signInData, {
     withCredentials: true,
   });
@@ -54,9 +61,8 @@ function signInApi(signInData) {
 
 function* signIn({ data }) {
   try {
-    const res = yield call(signInApi, data); // server의 응답을 받기 위해 동기로 api 호출
+    const res = yield call(signInApi, data);
     yield put({
-      // dispatch와 동일, Action이 실행된다.
       type: SIGN_IN_SUCCESS,
       data: res.data,
     });
@@ -73,28 +79,26 @@ function* watchSignIn() {
 }
 
 function signOutApi() {
-  // server에 요청
   return axios.post(
     '/user/sign-out',
     {},
     {
       withCredentials: true,
-    },
+    }
   );
 }
 
 function* signOut() {
   try {
-    yield call(signOutApi); // server의 응답을 받기 위해 동기로 api 호출
+    yield call(signOutApi);
     yield put({
-      // dispatch와 동일, Action이 실행된다.
       type: SIGN_OUT_SUCCESS,
     });
   } catch (e) {
-    console.error(e);
     yield put({
       type: SIGN_OUT_FAILURE,
     });
+    console.error(e);
   }
 }
 
@@ -103,7 +107,6 @@ function* watchSignOut() {
 }
 
 function loadUserApi(userId) {
-  // server에 요청
   return axios.get(userId ? `/user/${userId}` : '/user/', {
     withCredentials: true,
   });
@@ -111,23 +114,77 @@ function loadUserApi(userId) {
 
 function* loadUser(action) {
   try {
-    const result = yield call(loadUserApi, action.data); // server의 응답을 받기 위해 동기로 api 호출
+    const result = yield call(loadUserApi, action.data);
     yield put({
-      // dispatch와 동일, Action이 실행된다.
       type: LOAD_USER_SUCCESS,
       data: result.data,
       me: !action.data,
     });
   } catch (e) {
-    // console.error(e);
     yield put({
       type: LOAD_USER_FAILURE,
     });
+    console.error(e);
   }
 }
 
 function* watchLoadUser() {
   yield takeEvery(LOAD_USER_REQUEST, loadUser);
+}
+
+function followApi(userId) {
+  return axios.post(
+    `/user/${userId}/follow`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+function* follow(action) {
+  try {
+    const result = yield call(followApi, action.data);
+    yield put({
+      type: FOLLOW_USER_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: FOLLOW_USER_FAILURE,
+    });
+    console.error(e);
+  }
+}
+
+function* watchFollow() {
+  yield takeLatest(FOLLOW_USER_REQUEST, follow);
+}
+
+function unfollowApi(userId) {
+  return axios.delete(`/user/${userId}/follow`, {
+    withCredentials: true,
+  });
+}
+
+function* unfollow(action) {
+  try {
+    const result = yield call(unfollowApi, action.data);
+    yield put({
+      type: UNFOLLOW_USER_SUCCESS,
+      data: result.data,
+      me: !action.data,
+    });
+  } catch (e) {
+    yield put({
+      type: UNFOLLOW_USER_FAILURE,
+    });
+    console.error(e);
+  }
+}
+
+function* watchUnfollow() {
+  yield takeLatest(UNFOLLOW_USER_REQUEST, unfollow);
 }
 
 export default function* userSage() {
@@ -136,5 +193,7 @@ export default function* userSage() {
     fork(watchSignIn),
     fork(watchSignOut),
     fork(watchLoadUser),
+    fork(watchFollow),
+    fork(watchUnfollow),
   ]);
 }

@@ -37,19 +37,19 @@ const AppLayout = ({ children }) => {
         </Menu.Item>
       </Menu>
       <Row gutter={16} style={{ margin: '10px' }}>
-        <Col xs={0} md={3} />
-        <Col xs={24} md={4}>
+        <Col xs={0} md={0} lg={3} />
+        <Col xs={24} md={6} lg={4}>
           {me ? <UserProfile /> : <SignInForm />}
         </Col>
-        <Col xs={24} md={10}>
+        <Col xs={24} md={12} lg={10}>
           {children}
         </Col>
-        <Col xs={24} md={4}>
+        <Col xs={24} md={6} lg={4}>
           <Link href='https://joonhak.github.io/react-blog'>
             <a target='_blank'>Blog</a>
           </Link>
         </Col>
-        <Col xs={0} md={3} />
+        <Col xs={0} md={0} lg={3} />
       </Row>
     </div>
   );

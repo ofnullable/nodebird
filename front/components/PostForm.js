@@ -27,10 +27,11 @@ const PostForm = () => {
   // TODO: https://ant.design/components/upload/ antd upload component 확인 후 적용해보기!
   const onFileInputChange = e => {
     const imageData = new FormData();
+
+    // === Array().forEach.call()
     [].forEach.call(e.target.files, f => {
       imageData.append('image', f);
     });
-
     dispatch({
       type: UPLOAD_IMAGES_REQUEST,
       data: imageData,

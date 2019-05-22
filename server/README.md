@@ -60,7 +60,7 @@
         cors({
           origin: true,
           credentials: true, // 로그인 유지를 위한 설정
-        }),
+        })
       );
       ```
     - 간단 + 편-안
@@ -93,3 +93,8 @@
   - 공통 Logic이 필요한 경우 ( ex - 로그인 체크 ) `middleware`로 중복제거가 가능하다.
   - filter나 interceptor같은건가보다!
     <br/>
+
+# 5일차
+
+- Image upload
+  - `multer`

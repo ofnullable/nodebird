@@ -35,8 +35,8 @@ router.post('/', isSignIn, upload.none(), async (req, res, next) => {
         hashtags.map(tag =>
           db.Hashtag.findOrCreate({
             where: { name: tag.slice(1).toLowerCase() },
-          }),
-        ),
+          })
+        )
       );
       await newPost.addHashtags(result.map(r => r[0]));
     }
@@ -46,7 +46,7 @@ router.post('/', isSignIn, upload.none(), async (req, res, next) => {
         const images = await Promise.all(
           req.body.image.map(i => {
             return db.Image.create({ src: i });
-          }),
+          })
         );
         await newPost.addImages(images);
       } else {
@@ -157,6 +157,67 @@ router.delete('/:id/like', isSignIn, async (req, res, next) => {
     }
     await post.removeLiker(req.user.id);
     return res.json({ userId: req.user.id });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.post('/:id/retweet', isSignIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({
+      where: { id: req.params.id },
+      include: [
+        {
+          model: db.Post,
+          as: 'Retweet',
+        },
+      ],
+    });
+    if (!post) {
+      return res.status(404).send('Post not found');
+    }
+    if (
+      req.user.id === post.UserId ||
+      (post.Retweet && post.Retweet.UserId === req.user.id)
+    ) {
+      return res.status(403).send('Can not retweet yours');
+    }
+    const retweetTarget = post.RetweetId || post.id; // retweet 을 retweet하는건지 원본을 retweet하는건지 check
+    const exPost = await db.Post.findOne({
+      where: { UserId: req.user.id, RetweetId: retweetTarget },
+    });
+    if (exPost) {
+      return res.status(403).send('Already Retweet');
+    }
+    const retweet = await db.Post.create({
+      UserId: req.user.id,
+      RetweetId: retweetTarget,
+      content: 'retweet',
+    });
+    const retweetWithPrevPost = await db.Post.findOne({
+      where: { id: retweet.id },
+      include: [
+        {
+          model: db.User,
+          attributes: ['id', 'nickname'],
+        },
+        {
+          model: db.Post,
+          as: 'Retweet',
+          include: [
+            {
+              model: db.User,
+              attributes: ['id', 'nickname'],
+            },
+            {
+              model: db.Image,
+            },
+          ],
+        },
+      ],
+    });
+    res.json(retweetWithPrevPost);
   } catch (e) {
     console.error(e);
     next(e);

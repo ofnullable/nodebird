@@ -22,15 +22,20 @@ import {
   UPLOAD_IMAGES_REQUEST,
   UPLOAD_IMAGES_SUCCESS,
   UPLOAD_IMAGES_FAILURE,
+  LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
   LIKE_POST_FAILURE,
-  LIKE_POST_REQUEST,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
   UNLIKE_POST_FAILURE,
+  RETWEET_REQUEST,
+  RETWEET_SUCCESS,
+  RETWEET_FAILURE,
 } from '../reducers/post';
+import { ADD_POST_TO_ME } from '../reducers/user';
 
 function uploadImagesApi(formData) {
+  // upload한 file path들을 받음
   return axios.post(`/post/images`, formData, {
     withCredentials: true,
   });
@@ -38,7 +43,6 @@ function uploadImagesApi(formData) {
 
 function* uploadImages(action) {
   try {
-    // file path들을 받음
     const result = yield call(uploadImagesApi, action.data);
     yield put({
       type: UPLOAD_IMAGES_SUCCESS,
@@ -69,6 +73,10 @@ function* addPost({ data }) {
     yield put({
       type: ADD_POST_SUCCESS,
       data: result.data,
+    });
+    yield put({
+      type: ADD_POST_TO_ME,
+      data: result.data.id,
     });
   } catch (e) {
     yield put({
@@ -188,7 +196,7 @@ function addCommentApi(data) {
     { content: data.content },
     {
       withCredentials: true,
-    },
+    }
   );
 }
 
@@ -221,7 +229,7 @@ function likePostApi(postId) {
     {},
     {
       withCredentials: true,
-    },
+    }
   );
 }
 
@@ -279,6 +287,38 @@ function* watchUnlikePost() {
   yield takeLatest(UNLIKE_POST_REQUEST, unlikePost);
 }
 
+function retweetApi(postId) {
+  return axios.post(
+    `/post/${postId}/retweet`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+function* retweet(action) {
+  try {
+    // file path들을 받음
+    const result = yield call(retweetApi, action.data);
+    yield put({
+      type: RETWEET_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: RETWEET_FAILURE,
+      error: e,
+    });
+    console.error(e);
+    alert(e.response && e.response.data);
+  }
+}
+
+function* watchRetweet() {
+  yield takeLatest(RETWEET_REQUEST, retweet);
+}
+
 export default function* postSaga() {
   yield all([
     fork(watchUploadImages),
@@ -290,5 +330,6 @@ export default function* postSaga() {
     fork(watchAddComment),
     fork(watchLikePost),
     fork(watchUnlikePost),
+    fork(watchRetweet),
   ]);
 }

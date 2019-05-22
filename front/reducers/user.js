@@ -130,6 +130,30 @@ export default (state = initialState, action) => {
         ...state,
         userInfo: action.data,
       };
+    case FOLLOW_USER_SUCCESS:
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Followings: [{ id: action.data }, ...state.me.Followings],
+        },
+      };
+    case UNFOLLOW_USER_SUCCESS:
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Followings: state.me.Followings.filter(f => f.id !== action.data),
+        },
+      };
+    case ADD_POST_TO_ME:
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Posts: [{ id: action.data }, ...state.me.Posts],
+        },
+      };
     default:
       return {
         ...state,

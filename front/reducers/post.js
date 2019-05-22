@@ -105,7 +105,7 @@ export default (state = initialState, action) => {
       };
     case LOAD_COMMENTS_SUCCESS: {
       const postIndex = state.mainPosts.findIndex(
-        v => v.id === action.data.postId,
+        v => v.id === action.data.postId
       );
       const post = state.mainPosts[postIndex];
       const Comments = action.data.comments;
@@ -125,7 +125,7 @@ export default (state = initialState, action) => {
       };
     case ADD_COMMENT_SUCCESS: {
       const postIndex = state.mainPosts.findIndex(
-        v => v.id === action.data.postId,
+        v => v.id === action.data.postId
       );
       const post = state.mainPosts[postIndex];
       const Comments = [...post.Comments, action.data.comments];
@@ -146,7 +146,7 @@ export default (state = initialState, action) => {
       };
     case LIKE_POST_SUCCESS: {
       const postIndex = state.mainPosts.findIndex(
-        v => v.id === action.data.postId,
+        v => v.id === action.data.postId
       );
       const post = state.mainPosts[postIndex];
       const Likers = [{ id: action.data.userId }, ...post.Likers];
@@ -159,7 +159,7 @@ export default (state = initialState, action) => {
     }
     case UNLIKE_POST_SUCCESS: {
       const postIndex = state.mainPosts.findIndex(
-        v => v.id === action.data.postId,
+        v => v.id === action.data.postId
       );
       const post = state.mainPosts[postIndex];
       const Likers = post.Likers.filter(v => v.id !== action.data.userId);
@@ -170,6 +170,11 @@ export default (state = initialState, action) => {
         mainPosts,
       };
     }
+    case RETWEET_SUCCESS:
+      return {
+        ...state,
+        mainPosts: [action.data, ...state.mainPosts],
+      };
     default:
       return {
         ...state,

@@ -26,7 +26,7 @@ app.prepare().then(() => {
         httpOnly: true,
         secure: false,
       },
-    }),
+    })
   );
 
   server.get('/hashtag/:tag', (req, res) => {
