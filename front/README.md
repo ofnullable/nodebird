@@ -70,7 +70,6 @@
 # 5일차
 
 - `Generator`
-
   - `코드의 실행 제어기` 라고 생각하면 될거같다.
   - `yield` 키워드가 중단점 역할을 한다.
   - `yield*`은 뒤에 오는 값을 iterable로 처리하겠다는 의미이다.
@@ -85,7 +84,6 @@
     const generator = gen();
     generator.next(); // {value: 1, done: false} ...
     ```
-
 - `Redux-saga`
   - `take()`
     - 인자로 받는 Action이 Dispatch 되길 기다린다고 명시하는것
@@ -152,7 +150,7 @@
   - Hooks의 두번째 인자
     - 함수가 업데이트 되어야할 때를 잘 판단하자
   - `Redux, Redux-saga`에서 변수 이름 주의하기
-    - ~~나중에 오타인거 확인하면 너무 빡치니까..~~
+    - ~~나중에 오타인거 확인하면 너무 화나니까..~~
       <br/>
 
 # 10일차
@@ -162,3 +160,44 @@
   - 그냥 html에서 하던것처럼 FormData만들어서 보내면 됌!
 - Like, Unlike
   - Click할때마다 Post의 Liker check하고 아이콘 toggle 및 request 전송
+    <br/>
+
+# 11일차
+
+- retweet
+  - PostCard가 너무 더러워졌다... 수정해볼것
+- nickname 수정 및 profile page
+  - 계속 하던거..
+    <br/>
+
+# 12일차
+
+- `SSR`
+  - page로딩 전 Data를 미리 받아서 render
+  - search bot 및 ux적 측면에서 필수적
+  - `Component.getInitialProps`는 **/pages 의 Component들에서만 사용한다**
+  - SSR설정을 위한 설정이 next에서는 간편하다!
+  - ```js
+    // next-redux-saga package 필요
+    // pages/_app.js
+    import withReduxSaga from 'next-redux-saga';
+
+    // Component code
+
+    Component.getInitailProps = async context => {
+      // ... do something before page laod
+    }
+
+    // next-redux middleware config
+    const configureStore = (initialState, options) => {
+      // something apply middlewares
+      const store = createStore(reducer, initialState, enhancer);
+      store.sagaTask = sagaMiddleware.run(rootSaga);
+      return store;
+    }
+
+    export default withRedux(configureStore)(withReduxSaga(Component));
+    ```
+  - 약간 긴느낌이 있긴 하지만 위 코드가 SSR + Redux-saga ( 비동기 서버요청 ) 를 위한 설정
+  - next없이 SSR도전해봐야 얼마나 편한건지 알려나..
+    <br/>

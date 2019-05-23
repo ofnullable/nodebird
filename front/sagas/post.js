@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { all, call, fork, takeLatest, put, delay } from 'redux-saga/effects';
+import { all, call, fork, takeLatest, put } from 'redux-saga/effects';
 import {
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
@@ -31,8 +31,11 @@ import {
   RETWEET_REQUEST,
   RETWEET_SUCCESS,
   RETWEET_FAILURE,
+  REMOVE_POST_REQUEST,
+  REMOVE_POST_SUCCESS,
+  REMOVE_POST_FAILURE,
 } from '../reducers/post';
-import { ADD_POST_TO_ME } from '../reducers/user';
+import { ADD_POST, REMOVE_POST } from '../reducers/user';
 
 function uploadImagesApi(formData) {
   // upload한 file path들을 받음
@@ -75,7 +78,7 @@ function* addPost({ data }) {
       data: result.data,
     });
     yield put({
-      type: ADD_POST_TO_ME,
+      type: ADD_POST,
       data: result.data.id,
     });
   } catch (e) {
@@ -89,6 +92,36 @@ function* addPost({ data }) {
 
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
+}
+
+function removePostApi(postId) {
+  return axios.delete(`/post/${postId}`, {
+    withCredentials: true,
+  });
+}
+
+function* removePost({ data }) {
+  try {
+    const result = yield call(removePostApi, data);
+    yield put({
+      type: REMOVE_POST_SUCCESS,
+      data: result.data,
+    });
+    yield put({
+      type: REMOVE_POST,
+      data: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: REMOVE_POST_FAILURE,
+      error: e,
+    });
+    console.error(e);
+  }
+}
+
+function* watchRemovePost() {
+  yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
 
 function loadMainPostsApi() {
@@ -116,7 +149,7 @@ function* watchLoadMainPosts() {
 }
 
 function loadUserPostsApi(id) {
-  return axios.get(`/user/${id}/posts`);
+  return axios.get(`/user/${id || 0}/posts`);
 }
 
 function* loadUserPosts(action) {
@@ -140,7 +173,7 @@ function* watchLoadUserPosts() {
 }
 
 function loadHashtagPostsApi(tag) {
-  return axios.get(`/posts/${tag}`);
+  return axios.get(`/posts/${encodeURIComponent(tag)}`);
 }
 
 function* loadHashtagPosts(action) {
@@ -235,7 +268,6 @@ function likePostApi(postId) {
 
 function* likePost(action) {
   try {
-    // file path들을 받음
     const result = yield call(likePostApi, action.data);
     yield put({
       type: LIKE_POST_SUCCESS,
@@ -265,7 +297,6 @@ function unlikePostApi(postId) {
 
 function* unlikePost(action) {
   try {
-    // file path들을 받음
     const result = yield call(unlikePostApi, action.data);
     yield put({
       type: UNLIKE_POST_SUCCESS,
@@ -299,7 +330,6 @@ function retweetApi(postId) {
 
 function* retweet(action) {
   try {
-    // file path들을 받음
     const result = yield call(retweetApi, action.data);
     yield put({
       type: RETWEET_SUCCESS,
@@ -323,6 +353,7 @@ export default function* postSaga() {
   yield all([
     fork(watchUploadImages),
     fork(watchAddPost),
+    fork(watchRemovePost),
     fork(watchLoadMainPosts),
     fork(watchLoadUserPosts),
     fork(watchLoadHashtagPosts),

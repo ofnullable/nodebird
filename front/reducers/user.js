@@ -14,47 +14,48 @@ export const initialState = {
   editNicknameErrorReason: '',
 };
 
-export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const ADD_POST = 'USER/ADD_POST';
+export const REMOVE_POST = 'USER/REMOVE_POST';
 
-export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST'; // Action의 이름
-export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
-export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
+export const SIGN_UP_REQUEST = 'USER/SIGN_UP_REQUEST'; // Action의 이름
+export const SIGN_UP_SUCCESS = 'USER/SIGN_UP_SUCCESS';
+export const SIGN_UP_FAILURE = 'USER/SIGN_UP_FAILURE';
 
-export const SIGN_IN_REQUEST = 'SIGN_IN_REQUEST';
-export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
-export const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE';
+export const SIGN_IN_REQUEST = 'USER/SIGN_IN_REQUEST';
+export const SIGN_IN_SUCCESS = 'USER/SIGN_IN_SUCCESS';
+export const SIGN_IN_FAILURE = 'USER/SIGN_IN_FAILURE';
 
-export const SIGN_OUT_REQUEST = 'SIGN_OUT_REQUEST';
-export const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS';
-export const SIGN_OUT_FAILURE = 'SIGN_OUT_FAILURE';
+export const SIGN_OUT_REQUEST = 'USER/SIGN_OUT_REQUEST';
+export const SIGN_OUT_SUCCESS = 'USER/SIGN_OUT_SUCCESS';
+export const SIGN_OUT_FAILURE = 'USER/SIGN_OUT_FAILURE';
 
-export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
-export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
-export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
+export const LOAD_USER_REQUEST = 'USER/LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'USER/LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'USER/LOAD_USER_FAILURE';
 
-export const LOAD_FOLLOWERS_REQUEST = 'LOAD_FOLLOWERS_REQUEST';
-export const LOAD_FOLLOWERS_SUCCESS = 'LOAD_FOLLOWERS_SUCCESS';
-export const LOAD_FOLLOWERS_FAILURE = 'LOAD_FOLLOWERS_FAILURE';
+export const LOAD_FOLLOWERS_REQUEST = 'USER/LOAD_FOLLOWERS_REQUEST';
+export const LOAD_FOLLOWERS_SUCCESS = 'USER/LOAD_FOLLOWERS_SUCCESS';
+export const LOAD_FOLLOWERS_FAILURE = 'USER/LOAD_FOLLOWERS_FAILURE';
 
-export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
-export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
-export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
+export const LOAD_FOLLOWINGS_REQUEST = 'USER/LOAD_FOLLOWINGS_REQUEST';
+export const LOAD_FOLLOWINGS_SUCCESS = 'USER/LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAILURE = 'USER/LOAD_FOLLOWINGS_FAILURE';
 
-export const FOLLOW_USER_SUCCESS = 'FOLLOW_USER_SUCCESS';
-export const FOLLOW_USER_REQUEST = 'FOLLOW_USER_REQUEST';
-export const FOLLOW_USER_FAILURE = 'FOLLOW_USER_FAILURE';
+export const FOLLOW_USER_SUCCESS = 'USER/FOLLOW_USER_SUCCESS';
+export const FOLLOW_USER_REQUEST = 'USER/FOLLOW_USER_REQUEST';
+export const FOLLOW_USER_FAILURE = 'USER/FOLLOW_USER_FAILURE';
 
-export const UNFOLLOW_USER_REQUEST = 'UNFOLLOW_USER_REQUEST';
-export const UNFOLLOW_USER_SUCCESS = 'UNFOLLOW_USER_SUCCESS';
-export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE';
+export const UNFOLLOW_USER_REQUEST = 'USER/UNFOLLOW_USER_REQUEST';
+export const UNFOLLOW_USER_SUCCESS = 'USER/UNFOLLOW_USER_SUCCESS';
+export const UNFOLLOW_USER_FAILURE = 'USER/UNFOLLOW_USER_FAILURE';
 
-export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST';
-export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
-export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
+export const REMOVE_FOLLOWER_REQUEST = 'USER/REMOVE_FOLLOWER_REQUEST';
+export const REMOVE_FOLLOWER_SUCCESS = 'USER/REMOVE_FOLLOWER_SUCCESS';
+export const REMOVE_FOLLOWER_FAILURE = 'USER/REMOVE_FOLLOWER_FAILURE';
 
-export const EDIT_NICKNAME_REQUEST = 'EDIT_NICKNAME_REQUEST';
-export const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
-export const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
+export const EDIT_NICKNAME_REQUEST = 'USER/EDIT_NICKNAME_REQUEST';
+export const EDIT_NICKNAME_SUCCESS = 'USER/EDIT_NICKNAME_SUCCESS';
+export const EDIT_NICKNAME_FAILURE = 'USER/EDIT_NICKNAME_FAILURE';
 
 // 동적인 data는 함수로 action을 return한다.
 // export const signUpRequestAction = data => ({
@@ -176,14 +177,6 @@ export default (state = initialState, action) => {
         },
         followerList: state.followerList.filter(f => f.id !== action.data),
       };
-    case ADD_POST_TO_ME:
-      return {
-        ...state,
-        me: {
-          ...state.me,
-          Posts: [{ id: action.data }, ...state.me.Posts],
-        },
-      };
     case EDIT_NICKNAME_REQUEST:
       return {
         ...state,
@@ -204,6 +197,22 @@ export default (state = initialState, action) => {
         ...state,
         isEditingNickname: false,
         editNicknameErrorReason: action.error,
+      };
+    case ADD_POST:
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Posts: [{ id: action.data }, ...state.me.Posts],
+        },
+      };
+    case REMOVE_POST:
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Posts: state.me.Posts.filter(p => p.id !== action.data),
+        },
       };
     default:
       return {
