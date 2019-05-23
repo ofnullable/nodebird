@@ -146,6 +146,9 @@ router.get('/:id/posts', async (req, res, next) => {
           model: db.User,
           attributes: ['id', 'nickname'],
         },
+        {
+          model: db.Image,
+        },
       ],
     });
     return res.json(posts);
@@ -156,8 +159,33 @@ router.get('/:id/posts', async (req, res, next) => {
 });
 
 router.get('/:id/follow', async (req, res, next) => {});
-router.post('/:id/follow', async (req, res, next) => {});
-router.delete('/:id/follow', async (req, res, next) => {});
+
+router.post('/:id/follow', isSignIn, async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: { id: req.user.id },
+    });
+    await me.addFollowing(req.params.id);
+    res.send(req.params.id);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.delete('/:id/follow', isSignIn, async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: { id: req.user.id },
+    });
+    await me.removeFollowing(req.params.id);
+    res.send(req.params.id);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
 router.delete('/:id/follower', async (req, res, next) => {});
 
 module.exports = router;

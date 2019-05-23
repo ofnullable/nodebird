@@ -154,3 +154,11 @@
   - `Redux, Redux-saga`에서 변수 이름 주의하기
     - ~~나중에 오타인거 확인하면 너무 빡치니까..~~
       <br/>
+
+# 10일차
+
+- Image Upload
+  - react의 file upload처리
+  - 그냥 html에서 하던것처럼 FormData만들어서 보내면 됌!
+- Like, Unlike
+  - Click할때마다 Post의 Liker check하고 아이콘 toggle 및 request 전송

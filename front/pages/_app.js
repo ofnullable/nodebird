@@ -16,10 +16,21 @@ const NodeBird = ({ Component, store, pageProps }) => {
       <Head>
         <title>NodeBird</title>
         <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.6/antd.min.css"
+          rel='stylesheet'
+          type='text/css'
+          charSet='UTF-8'
+          href='https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css'
         />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.6/antd.min.js" />
+        <link
+          rel='stylesheet'
+          type='text/css'
+          href='https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css'
+        />
+        <link
+          rel='stylesheet'
+          href='https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.6/antd.min.css'
+        />
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.6/antd.min.js' />
       </Head>
       <AppLayout>
         <Component {...pageProps} />
@@ -55,7 +66,7 @@ const configureStore = (initialState, options) => {
           applyMiddleware(...middlewares),
           !options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__
             ? window.__REDUX_DEVTOOLS_EXTENSION__()
-            : f => f,
+            : f => f
         );
   const store = createStore(reducer, initialState, enhancer);
   sagaMiddleware.run(rootSaga);

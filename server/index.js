@@ -19,11 +19,12 @@ passportConfig();
 db.sequelize.sync();
 
 app.use(morgan('dev'));
+app.use('/', express.static('uploads'));
 app.use(
   cors({
     origin: true,
     credentials: true,
-  }),
+  })
 );
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
@@ -36,7 +37,7 @@ app.use(
       secure: false, // https
     },
     name: process.env.EXPRESS_SESSION_NAME,
-  }),
+  })
 );
 
 app.use(passport.initialize());
