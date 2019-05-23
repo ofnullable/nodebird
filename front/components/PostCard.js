@@ -23,7 +23,6 @@ import {
 } from '../reducers/post';
 import PostImages from './PostImages';
 import PostCardContent from './PostCardContent';
-import { Post } from '../../server/models';
 import { FOLLOW_USER_REQUEST, UNFOLLOW_USER_REQUEST } from '../reducers/user';
 
 const PostCard = memo(({ post }) => {
@@ -119,7 +118,7 @@ const PostCard = memo(({ post }) => {
   );
 
   return (
-    <div>
+    <div style={{ marginBottom: '20px' }}>
       <Card
         key={post.createdAt}
         cover={

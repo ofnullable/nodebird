@@ -10,6 +10,8 @@ export const initialState = {
   followingList: [],
   followerList: [],
   userInfo: null, // 다른사람의 정보
+  isEditingNickname: false,
+  editNicknameErrorReason: '',
 };
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
@@ -30,9 +32,13 @@ export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
 export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
 export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
 
-export const LOAD_FOLLOW_REQUEST = 'LOAD_FOLLOW_REQUEST';
-export const LOAD_FOLLOW_SUCCESS = 'LOAD_FOLLOW_SUCCESS';
-export const LOAD_FOLLOW_FAILURE = 'LOAD_FOLLOW_FAILURE';
+export const LOAD_FOLLOWERS_REQUEST = 'LOAD_FOLLOWERS_REQUEST';
+export const LOAD_FOLLOWERS_SUCCESS = 'LOAD_FOLLOWERS_SUCCESS';
+export const LOAD_FOLLOWERS_FAILURE = 'LOAD_FOLLOWERS_FAILURE';
+
+export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
+export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
 
 export const FOLLOW_USER_SUCCESS = 'FOLLOW_USER_SUCCESS';
 export const FOLLOW_USER_REQUEST = 'FOLLOW_USER_REQUEST';
@@ -45,6 +51,10 @@ export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE';
 export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST';
 export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
 export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
+
+export const EDIT_NICKNAME_REQUEST = 'EDIT_NICKNAME_REQUEST';
+export const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
+export const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
 
 // 동적인 data는 함수로 action을 return한다.
 // export const signUpRequestAction = data => ({
@@ -145,6 +155,26 @@ export default (state = initialState, action) => {
           ...state.me,
           Followings: state.me.Followings.filter(f => f.id !== action.data),
         },
+        followingList: state.followingList.filter(f => f.id !== action.data),
+      };
+    case LOAD_FOLLOWERS_SUCCESS:
+      return {
+        ...state,
+        followerList: action.data,
+      };
+    case LOAD_FOLLOWINGS_SUCCESS:
+      return {
+        ...state,
+        followingList: action.data,
+      };
+    case REMOVE_FOLLOWER_SUCCESS:
+      return {
+        ...state,
+        followerList: {
+          ...state.me,
+          Followers: state.me.Followers.filter(f => f.id !== action.data),
+        },
+        followerList: state.followerList.filter(f => f.id !== action.data),
       };
     case ADD_POST_TO_ME:
       return {
@@ -153,6 +183,27 @@ export default (state = initialState, action) => {
           ...state.me,
           Posts: [{ id: action.data }, ...state.me.Posts],
         },
+      };
+    case EDIT_NICKNAME_REQUEST:
+      return {
+        ...state,
+        isEditingNickname: true,
+        editNicknameErrorReason: '',
+      };
+    case EDIT_NICKNAME_SUCCESS:
+      return {
+        ...state,
+        isEditingNickname: false,
+        me: {
+          ...state.me,
+          nickname: action.data,
+        },
+      };
+    case EDIT_NICKNAME_REQUEST:
+      return {
+        ...state,
+        isEditingNickname: false,
+        editNicknameErrorReason: action.error,
       };
     default:
       return {

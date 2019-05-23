@@ -26,6 +26,18 @@ import {
   UNFOLLOW_USER_REQUEST,
   UNFOLLOW_USER_SUCCESS,
   UNFOLLOW_USER_FAILURE,
+  LOAD_FOLLOWERS_REQUEST,
+  LOAD_FOLLOWERS_SUCCESS,
+  LOAD_FOLLOWERS_FAILURE,
+  LOAD_FOLLOWINGS_REQUEST,
+  LOAD_FOLLOWINGS_SUCCESS,
+  LOAD_FOLLOWINGS_FAILURE,
+  REMOVE_FOLLOWER_REQUEST,
+  REMOVE_FOLLOWER_SUCCESS,
+  REMOVE_FOLLOWER_FAILURE,
+  EDIT_NICKNAME_REQUEST,
+  EDIT_NICKNAME_SUCCESS,
+  EDIT_NICKNAME_FAILURE,
 } from '../reducers/user';
 
 function signUpApi(signUpData) {
@@ -187,6 +199,113 @@ function* watchUnfollow() {
   yield takeLatest(UNFOLLOW_USER_REQUEST, unfollow);
 }
 
+function loadFollowersApi(userId) {
+  return axios.get(`/user/${userId}/followers`, {
+    withCredentials: true,
+  });
+}
+
+function* loadFollowers(action) {
+  try {
+    const result = yield call(loadFollowersApi, action.data);
+    yield put({
+      type: LOAD_FOLLOWERS_SUCCESS,
+      data: result.data,
+      me: !action.data,
+    });
+  } catch (e) {
+    yield put({
+      type: LOAD_FOLLOWERS_FAILURE,
+    });
+    console.error(e);
+  }
+}
+
+function* watchLoadFollowers() {
+  yield takeLatest(LOAD_FOLLOWERS_REQUEST, loadFollowers);
+}
+
+function loadFollowingsApi(userId) {
+  return axios.get(`/user/${userId}/followings`, {
+    withCredentials: true,
+  });
+}
+
+function* loadFollowings(action) {
+  try {
+    const result = yield call(loadFollowingsApi, action.data);
+    yield put({
+      type: LOAD_FOLLOWINGS_SUCCESS,
+      data: result.data,
+      me: !action.data,
+    });
+  } catch (e) {
+    yield put({
+      type: LOAD_FOLLOWINGS_FAILURE,
+    });
+    console.error(e);
+  }
+}
+
+function* watchLoadFollowings() {
+  yield takeLatest(LOAD_FOLLOWINGS_REQUEST, loadFollowings);
+}
+
+function removeFollowerApi(userId) {
+  return axios.delete(`/user/${userId}/follower`, {
+    withCredentials: true,
+  });
+}
+
+function* removeFollower(action) {
+  try {
+    const result = yield call(removeFollowerApi, action.data);
+    yield put({
+      type: REMOVE_FOLLOWER_SUCCESS,
+      data: result.data,
+      me: !action.data,
+    });
+  } catch (e) {
+    yield put({
+      type: REMOVE_FOLLOWER_FAILURE,
+    });
+    console.error(e);
+  }
+}
+
+function* watchRemoveFollower() {
+  yield takeLatest(REMOVE_FOLLOWER_REQUEST, removeFollower);
+}
+
+function editNicknameApi(nickname) {
+  return axios.patch(
+    `/user/nickname`,
+    { nickname },
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+function* editNickname(action) {
+  try {
+    const result = yield call(editNicknameApi, action.data);
+    yield put({
+      type: EDIT_NICKNAME_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: EDIT_NICKNAME_FAILURE,
+    });
+    console.error(e);
+  }
+}
+
+function* watchEditNickname() {
+  yield takeLatest(EDIT_NICKNAME_REQUEST, editNickname);
+}
+
 export default function* userSage() {
   yield all([
     fork(watchSignUp),
@@ -195,5 +314,9 @@ export default function* userSage() {
     fork(watchLoadUser),
     fork(watchFollow),
     fork(watchUnfollow),
+    fork(watchLoadFollowers),
+    fork(watchLoadFollowings),
+    fork(watchRemoveFollower),
+    fork(watchEditNickname),
   ]);
 }
