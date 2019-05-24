@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { all, call, fork, takeLatest, put } from 'redux-saga/effects';
+import { all, call, fork, takeLatest, put, throttle } from 'redux-saga/effects';
 import {
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
@@ -124,13 +124,13 @@ function* watchRemovePost() {
   yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
 
-function loadMainPostsApi() {
-  return axios.get('/posts');
+function loadMainPostsApi(lastId, limit = 10) {
+  return axios.get(`/posts?lastId=${lastId}&limit=${limit}`);
 }
 
-function* loadMainPosts() {
+function* loadMainPosts({ lastId }) {
   try {
-    const result = yield call(loadMainPostsApi);
+    const result = yield call(loadMainPostsApi, lastId);
     yield put({
       type: LOAD_MAIN_POSTS_SUCCESS,
       data: result.data,
@@ -145,7 +145,7 @@ function* loadMainPosts() {
 }
 
 function* watchLoadMainPosts() {
-  yield takeLatest(LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
+  yield throttle(1500, LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
 }
 
 function loadUserPostsApi(id) {
@@ -172,13 +172,15 @@ function* watchLoadUserPosts() {
   yield takeLatest(LOAD_USER_POSTS_REQUEST, loadUserPosts);
 }
 
-function loadHashtagPostsApi(tag) {
-  return axios.get(`/posts/${encodeURIComponent(tag)}`);
+function loadHashtagPostsApi(tag, lastId, limit = 10) {
+  return axios.get(
+    `/posts/${encodeURIComponent(tag)}?lastId=${lastId}&limit=${limit}`
+  );
 }
 
 function* loadHashtagPosts(action) {
   try {
-    const result = yield call(loadHashtagPostsApi, action.data);
+    const result = yield call(loadHashtagPostsApi, action.data, action.lastId);
     yield put({
       type: LOAD_HASHTAG_POSTS_SUCCESS,
       data: result.data,
@@ -193,7 +195,7 @@ function* loadHashtagPosts(action) {
 }
 
 function* watchLoadHashtagPosts() {
-  yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
+  yield throttle(1500, LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
 }
 
 function loadCommentsApi(postId) {

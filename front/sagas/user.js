@@ -136,7 +136,7 @@ function* loadUser(action) {
     yield put({
       type: LOAD_USER_FAILURE,
     });
-    console.error(e);
+    // console.error(e);
   }
 }
 
@@ -185,7 +185,6 @@ function* unfollow(action) {
     yield put({
       type: UNFOLLOW_USER_SUCCESS,
       data: result.data,
-      me: !action.data,
     });
   } catch (e) {
     yield put({
@@ -199,19 +198,21 @@ function* watchUnfollow() {
   yield takeLatest(UNFOLLOW_USER_REQUEST, unfollow);
 }
 
-function loadFollowersApi(userId) {
-  return axios.get(`/user/${userId || 0}/followers`, {
-    withCredentials: true,
-  });
+function loadFollowersApi(userId, offset = 0, limit = 6) {
+  return axios.get(
+    `/user/${userId || 0}/followers?offset=${offset}&limit=${limit}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 function* loadFollowers(action) {
   try {
-    const result = yield call(loadFollowersApi, action.data);
+    const result = yield call(loadFollowersApi, action.data, action.offset);
     yield put({
       type: LOAD_FOLLOWERS_SUCCESS,
       data: result.data,
-      me: !action.data,
     });
   } catch (e) {
     yield put({
@@ -225,19 +226,21 @@ function* watchLoadFollowers() {
   yield takeLatest(LOAD_FOLLOWERS_REQUEST, loadFollowers);
 }
 
-function loadFollowingsApi(userId) {
-  return axios.get(`/user/${userId || 0}/followings`, {
-    withCredentials: true,
-  });
+function loadFollowingsApi(userId, offset = 0, limit = 6) {
+  return axios.get(
+    `/user/${userId || 0}/followings?offset=${offset}&limit=${limit}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 function* loadFollowings(action) {
   try {
-    const result = yield call(loadFollowingsApi, action.data);
+    const result = yield call(loadFollowingsApi, action.data, action.offset);
     yield put({
       type: LOAD_FOLLOWINGS_SUCCESS,
       data: result.data,
-      me: !action.data,
     });
   } catch (e) {
     yield put({
@@ -263,7 +266,6 @@ function* removeFollower(action) {
     yield put({
       type: REMOVE_FOLLOWER_SUCCESS,
       data: result.data,
-      me: !action.data,
     });
   } catch (e) {
     yield put({

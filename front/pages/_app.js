@@ -69,17 +69,16 @@ NodeBird.getInitialProps = async context => {
   return { pageProps };
 };
 
+// store => next => action => {
+//   if (options.isServer) console.log(action);
+//   next(action);
+// },
+
 // HOC of next-redux-wrapper, for init store in NodeBird Component
 const configureStore = (initialState, options) => {
   // customize store
   const sagaMiddleware = createSagaMiddleware();
-  const middlewares = [
-    sagaMiddleware,
-    store => next => action => {
-      if (options.isServer) console.log(action);
-      next(action);
-    },
-  ];
+  const middlewares = [sagaMiddleware];
   const enhancer =
     process.env.NODE_ENV === 'production'
       ? compose(applyMiddleware(...middlewares))

@@ -1,10 +1,32 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { LOAD_HASHTAG_POSTS_REQUEST } from '../reducers/post';
 import PostCard from '../components/PostCard';
 
-const Hashtag = () => {
-  const { mainPosts } = useSelector(state => state.post);
+const Hashtag = ({ tag }) => {
+  const dispatch = useDispatch();
+  const { mainPosts, hasMorePosts } = useSelector(state => state.post);
+
+  const onScroll = useCallback(() => {
+    if (
+      hasMorePosts &&
+      window.scrollY + document.documentElement.clientHeight ===
+      document.documentElement.scrollHeight
+    ) {
+      dispatch({
+        type: LOAD_HASHTAG_POSTS_REQUEST,
+        lastId: mainPosts[mainPosts.length - 1].id,
+        data: tag,
+      });
+    }
+  }, [mainPosts.length, hasMorePosts]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [mainPosts.length, hasMorePosts]);
 
   return (
     <div>
@@ -17,7 +39,6 @@ const Hashtag = () => {
 
 // component did mount 보다 먼저 실행되는 life cycle
 Hashtag.getInitialProps = async context => {
-  console.log('hashtag gip');
   context.store.dispatch({
     type: LOAD_HASHTAG_POSTS_REQUEST,
     data: context.query.tag,
