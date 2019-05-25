@@ -77,6 +77,20 @@ router.post('/', isSignIn, upload.none(), async (req, res, next) => {
   }
 });
 
+router.delete('/:id', isSignIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({ where: { id: req.params.id } });
+    if (!post) {
+      return res.status(404).send('Post not found');
+    }
+    await db.Post.destroy({ where: { id: req.params.id } });
+    return res.send(req.params.id);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
 router.get('/:id/comments', async (req, res, next) => {
   try {
     const post = await db.Post.findOne({ where: { id: req.params.id } });
@@ -223,7 +237,5 @@ router.post('/:id/retweet', isSignIn, async (req, res, next) => {
     next(e);
   }
 });
-
-router.get('/:id', (req, res) => {});
 
 module.exports = router;

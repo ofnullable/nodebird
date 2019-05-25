@@ -47,7 +47,7 @@
     - () => `foo`라는 state의 값을 `bar`로 변경해라!
   - Redux의 hooks를 사용하려면 `v7.1.0` 이상을 사용해야 한다!!
   - Redux가 관리할 state를 group으로 나눠서 관리하면 관리 및 사용이 용이하다.
-- 일단 Hooks로 사용하는 예제? 정도 배워봤는데 기존 class component에서는 어떻게 썼었지..
+- 일단 Hooks로 사용하는 예제? 정도 배워봤는데 기존 class component에서는 어떻게 썼었지..  
   <br/>
 
 # 4일차
@@ -64,13 +64,12 @@
     - 하지만, server와 통신할때에는 비동기 처리가 훨씬 많이 필요함
     - 따라서 `Redux-saga`라는 Middleware를 활용해서 비동기 동작을 처리한다..
   - `Redux`의 특정 Action이 Dispatch되는걸 `watch`하게 해놓는다.
-  - `watch`하고 있는 Action이 Dispatch 될 때 비동기 요청을 실행한다.
+  - `watch`하고 있는 Action이 Dispatch 될 때 비동기 요청을 실행한다.  
     <br/>
 
 # 5일차
 
 - `Generator`
-
   - `코드의 실행 제어기` 라고 생각하면 될거같다.
   - `yield` 키워드가 중단점 역할을 한다.
   - `yield*`은 뒤에 오는 값을 iterable로 처리하겠다는 의미이다.
@@ -85,7 +84,6 @@
     const generator = gen();
     generator.next(); // {value: 1, done: false} ...
     ```
-
 - `Redux-saga`
   - `take()`
     - 인자로 받는 Action이 Dispatch 되길 기다린다고 명시하는것
@@ -101,7 +99,7 @@
     - `takeLatest()`는 동시에 여러 요청이 발생했을 때 마지막 하나의 요청만 처리하는것을 의미한다.
   - `fork()`, `call()`
     - 둘 다 함수를 실행하는 역할을 한다.
-    - `call()`은 동기 호출, `fork()`는 비동기 호출
+    - `call()`은 동기 호출, `fork()`는 비동기 호출  
       <br/>
 
 # 6일차
@@ -115,13 +113,13 @@
     - component가 mount될 때, 이벤트 발생시 `Redux-saga`가 watch하고있는 Action을 Dispatch한다.
     - 작성해놓은 코드에 따라 `Redux, Redux-saga`가 state를 변경한다.
     - 이후 변경된 state를 활용해 화면을 그린다.
-  - ~~아니.. 해야될게 너무 많아..~~
+  - ~~아니.. 해야될게 너무 많아..~~  
     <br/>
 
 # 7일차
 
 - `axios`를 활용한 Server와 통신
-  - `Redux-saga`에서 특정 Action이 실행 될 때 `axios`를 활용하여 Server에 xhr 요청을 보낸다.
+  - `Redux-saga`에서 특정 Action이 실행 될 때 `axios`를 활용하여 Server에 xhr 요청을 보낸다.  
     <br/>
 
 # 8일차
@@ -135,7 +133,7 @@
   - 상태관리 해주는건 좋은데 작성할 코드가 너무 많아...
 - SSR 적용을 위한 setup
   - `express, morgan, cookie-parser...`
-  - next가 express를 품고있는 모양?
+  - next가 express를 품고있는 모양?  
     <br/>
 
 # 9일차
@@ -152,7 +150,7 @@
   - Hooks의 두번째 인자
     - 함수가 업데이트 되어야할 때를 잘 판단하자
   - `Redux, Redux-saga`에서 변수 이름 주의하기
-    - ~~나중에 오타인거 확인하면 너무 빡치니까..~~
+    - ~~나중에 오타인거 확인하면 너무 화나니까..~~  
       <br/>
 
 # 10일차
@@ -161,4 +159,85 @@
   - react의 file upload처리
   - 그냥 html에서 하던것처럼 FormData만들어서 보내면 됌!
 - Like, Unlike
-  - Click할때마다 Post의 Liker check하고 아이콘 toggle 및 request 전송
+  - Click할때마다 Post의 Liker check하고 아이콘 toggle 및 request 전송  
+    <br/>
+
+# 11일차
+
+- retweet
+  - PostCard가 너무 더러워졌다... 수정해볼것
+- nickname 수정 및 profile page
+  - 계속 하던거..  
+    <br/>
+
+# 12일차
+
+- `SSR`
+  - page로딩 전 Data를 미리 받아서 render
+  - search bot 및 ux적 측면에서 필수적
+  - `Component.getInitialProps`는 **/pages 의 Component들에서만 사용한다**
+  - SSR설정을 위한 설정이 next에서는 간편하다!
+  - ```js
+    // next-redux-saga package 필요
+    // pages/_app.js
+    import withReduxSaga from 'next-redux-saga';
+
+    // Component code
+
+    Component.getInitailProps = async context => {
+      // ... do something before page laod
+    }
+
+    // next-redux middleware config
+    const configureStore = (initialState, options) => {
+      // something apply middlewares
+      const store = createStore(reducer, initialState, enhancer);
+      store.sagaTask = sagaMiddleware.run(rootSaga);
+      return store;
+    }
+
+    export default withRedux(configureStore)(withReduxSaga(Component));
+    ```
+  - 약간 긴느낌이 있긴 하지만 위 코드가 SSR + Redux-saga ( 비동기 서버요청 ) 를 위한 설정
+  - next없이 SSR도전해봐야 얼마나 편한건지 알려나..  
+    <br/>
+
+# 13일차
+
+- 더보기 - Load more
+  - `offset`
+    - `ex) SELECT * FROM TABLE LIMIT 0 (offset), 10`
+  - 현재 data 기준으로 이후 ( 또는 이전 ) data를 가져오는 방식
+  - 현재 data가 현재 '화면에 보이는' data이기 때문에 업데이트가 잦은 data에는 어울리지 않음
+    - 화면에 data가 새로 로딩되는 방식이라면 감안할 수 있음
+    - 하지만 data를 append하는 모양이라면 중복이 발생 수 있기 때문에 좋은 방법은 아니다.
+  - 또한 성능 issue가 존재하기 때문에 지양하는것이 좋다.
+  - ~~근데 지금까지 이 방식만 해왔...ㅎ~~
+- 무한 스크롤 - Infinite scrolling
+  - `Scroll event` + `Last id`를 활용한 방식
+  - `last id?`
+    - `ex) SELECT * FROM TABLE WHERE ID < ( 또는 > ) 10 LIMIT 10`
+  - 현재 dataList중 가장 큰 ( 또는 가장 작은 ) id를 기준으로 data를 가져오는 방식
+  - 현재 프로젝트에는 Scroll event와 조합하여 사용했지만 Click event와도 조합이 가능하다.
+  - 실시간 데이터를 제외한 pagination이 가능하기 때문에 data가 append되는 화면에도 가능
+- [`immer`](https://github.com/immerjs/immer)
+  - state의 불변성 유지를 위한 노력을 `덜`하게 도와주는 Library
+  - ```js
+    // 이전 코드
+    case SOME_ACTION: 
+      return {
+        ...state,
+        array: [...state.array, action.arrayData],
+      }
+
+    // immer 적용 후
+    import produce from 'immer'
+    
+    // export default ... 
+    return produce(state, draft => {
+      case SOME_ACTION:
+        draft.array.push(action.arrayData);
+        break;
+    });
+    ```
+  - 잔 코드들이 붙어서 크게 편해보이지 않을 수 있지만 확실히 생각을 덜 할 수 있게 된다.

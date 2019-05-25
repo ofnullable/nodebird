@@ -5,7 +5,17 @@ const db = require('../models');
 
 router.get('/', async (req, res, next) => {
   try {
+    const lastId = parseInt(req.query.lastId);
+    let where = {};
+    if (lastId) {
+      where = {
+        id: {
+          [db.Sequelize.Op.lt]: lastId,
+        },
+      };
+    }
     const posts = await db.Post.findAll({
+      where,
       include: [
         {
           model: db.User,
@@ -34,6 +44,7 @@ router.get('/', async (req, res, next) => {
           ],
         },
       ],
+      limit: parseInt(req.query.limit, 10),
       order: [['createdAt', 'DESC']],
     });
     return res.json(posts);
@@ -45,7 +56,17 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:tag', async (req, res, next) => {
   try {
+    const lastId = parseInt(req.query.lastId);
+    let where = {};
+    if (lastId) {
+      where = {
+        id: {
+          [db.Sequelize.Op.lt]: lastId,
+        },
+      };
+    }
     const posts = await db.Post.findAll({
+      where,
       include: [
         {
           model: db.Hashtag,
@@ -78,6 +99,8 @@ router.get('/:tag', async (req, res, next) => {
           ],
         },
       ],
+      limit: parseInt(req.query.limit, 10),
+      order: [['createdAt', 'DESC']],
     });
     res.json(posts);
   } catch (e) {

@@ -14,16 +14,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
+import PostImages from './PostImages';
+import PostCardContent from './PostCardContent';
 import {
   ADD_COMMENT_REQUEST,
   LOAD_COMMENTS_REQUEST,
   LIKE_POST_REQUEST,
   UNLIKE_POST_REQUEST,
   RETWEET_REQUEST,
+  REMOVE_POST_REQUEST,
 } from '../reducers/post';
-import PostImages from './PostImages';
-import PostCardContent from './PostCardContent';
-import { Post } from '../../server/models';
 import { FOLLOW_USER_REQUEST, UNFOLLOW_USER_REQUEST } from '../reducers/user';
 
 const PostCard = memo(({ post }) => {
@@ -118,8 +118,15 @@ const PostCard = memo(({ post }) => {
     []
   );
 
+  const removePost = useCallback(postId => () => {
+    dispatch({
+      type: REMOVE_POST_REQUEST,
+      data: postId,
+    });
+  });
+
   return (
-    <div>
+    <div style={{ marginBottom: '20px' }}>
       <Card
         key={post.createdAt}
         cover={
@@ -142,11 +149,13 @@ const PostCard = memo(({ post }) => {
                 {me && post.UserId === me.id ? (
                   <div>
                     <Button>수정</Button>
-                    <Button type='danger'>삭제</Button>
+                    <Button type='danger' onClick={removePost(post.id)}>
+                      삭제
+                    </Button>
                   </div>
                 ) : (
-                  <Button type='danger'>신고</Button>
-                )}
+                    <Button type='danger'>신고</Button>
+                  )}
               </Button.Group>
             }
           >
@@ -157,10 +166,10 @@ const PostCard = memo(({ post }) => {
         extra={
           !me || post.UserId === me.id ? null : me.Followings &&
             me.Followings.find(f => f.id === post.User.id) ? (
-            <Button onClick={onUnfollow(post.User.id)}>언팔로우</Button>
-          ) : (
-            <Button onClick={onFollow(post.User.id)}>팔로우</Button>
-          )
+              <Button onClick={onUnfollow(post.User.id)}>언팔로우</Button>
+            ) : (
+              <Button onClick={onFollow(post.User.id)}>팔로우</Button>
+            )
         }
       >
         {post.RetweetId && post.Retweet ? (
@@ -192,21 +201,21 @@ const PostCard = memo(({ post }) => {
             />
           </Card>
         ) : (
-          <Card.Meta
-            avatar={
-              <Link
-                href={{ pathname: `/user`, query: { id: post.User.id } }}
-                as={`/user/${post.User.id}`}
-              >
-                <a>
-                  <Avatar>{post.User.nickname[0]}</Avatar>
-                </a>
-              </Link>
-            }
-            title={post.User.nickname}
-            description={<PostCardContent postContent={post.content} />}
-          />
-        )}
+            <Card.Meta
+              avatar={
+                <Link
+                  href={{ pathname: `/user`, query: { id: post.User.id } }}
+                  as={`/user/${post.User.id}`}
+                >
+                  <a>
+                    <Avatar>{post.User.nickname[0]}</Avatar>
+                  </a>
+                </Link>
+              }
+              title={post.User.nickname}
+              description={<PostCardContent postContent={post.content} />}
+            />
+          )}
       </Card>
       {commentFormOpened && (
         <div>

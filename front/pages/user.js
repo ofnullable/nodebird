@@ -1,44 +1,34 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { Card, Avatar } from 'antd';
 
 import PostCard from '../components/PostCard';
 import { LOAD_USER_REQUEST } from '../reducers/user';
 import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
 
-const User = ({ id }) => {
-  const dispatch = useDispatch();
+const User = () => {
   const { userInfo } = useSelector(state => state.user);
   const { mainPosts } = useSelector(state => state.post);
 
-  useEffect(() => {
-    dispatch({
-      type: LOAD_USER_REQUEST,
-      data: id,
-    });
-    dispatch({
-      type: LOAD_USER_POSTS_REQUEST,
-      data: id,
-    });
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div>
       {userInfo ? (
         <Card
+          style={{ marginBottom: '20px' }}
           actions={[
-            <div key="twit">
+            <div key='twit'>
               짹짹
               <br />
               {userInfo.Posts.length}
             </div>,
-            <div key="following">
+            <div key='following'>
               팔로잉
               <br />
               {userInfo.Followings.length}
             </div>,
-            <div key="followers">
+            <div key='followers'>
               팔로워
               <br />
               {userInfo.Followers.length}
@@ -58,12 +48,19 @@ const User = ({ id }) => {
   );
 };
 
-User.propTypes = {
-  id: PropTypes.number.isRequired,
-};
-
 // component did mount 보다 먼저 실행되는 life cycle
+// server에서 한번, front에서 한번 실행된다 ( 총 2번 )
+// action dispatch를 여기서 하면 페이지 로딩 전 데이터를 받아올 수 있다!
 User.getInitialProps = async context => {
+  const id = parseInt(context.query.id, 10);
+  context.store.dispatch({
+    type: LOAD_USER_REQUEST,
+    data: id,
+  });
+  context.store.dispatch({
+    type: LOAD_USER_POSTS_REQUEST,
+    data: id,
+  });
   return { id: parseInt(context.query.id, 10) };
 };
 

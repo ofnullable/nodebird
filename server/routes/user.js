@@ -138,7 +138,7 @@ router.get('/:id/posts', async (req, res, next) => {
   try {
     const posts = await db.Post.findAll({
       where: {
-        UserId: parseInt(req.params.id, 10),
+        UserId: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0,
         RetweetId: null,
       },
       include: [
@@ -157,8 +157,6 @@ router.get('/:id/posts', async (req, res, next) => {
     return next(e);
   }
 });
-
-router.get('/:id/follow', async (req, res, next) => {});
 
 router.post('/:id/follow', isSignIn, async (req, res, next) => {
   try {
@@ -186,6 +184,70 @@ router.delete('/:id/follow', isSignIn, async (req, res, next) => {
   }
 });
 
-router.delete('/:id/follower', async (req, res, next) => {});
+router.get('/:id/followers', isSignIn, async (req, res, next) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        id: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0,
+      },
+    });
+    const followers = await user.getFollowers({
+      attributes: ['id', 'nickname'],
+      limit: parseInt(req.query.limit, 10),
+      offset: parseInt(req.query.offset, 10),
+    });
+    res.json(followers);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+router.get('/:id/followings', isSignIn, async (req, res, next) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        id: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0,
+      },
+    });
+    const followings = await user.getFollowings({
+      attributes: ['id', 'nickname'],
+      limit: parseInt(req.query.limit, 10),
+      offset: parseInt(req.query.offset, 10),
+    });
+    res.json(followings);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+router.delete('/:id/follower', isSignIn, async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: { id: parseInt(req.user.id, 10) },
+    });
+    await me.removeFollower(req.params.id);
+    res.send(req.params.id);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.patch('/nickname', isSignIn, async (req, res, next) => {
+  try {
+    await db.User.update(
+      {
+        nickname: req.body.nickname,
+      },
+      {
+        where: { id: req.user.id },
+      }
+    );
+    res.send(req.body.nickname);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
 
 module.exports = router;

@@ -9,28 +9,28 @@ const UserProfile = () => {
 
   const onSignOut = useCallback(() => {
     dispatch({
-      type: SIGN_OUT_REQUEST
+      type: SIGN_OUT_REQUEST,
     });
   }, []);
 
   return (
     <Card
       actions={[
-        <div key="twit">
+        <div key='twit'>
           짹짹
           <br />
           {me.Posts.length}
         </div>,
-        <div key="following">
+        <div key='following'>
           팔로잉
           <br />
           {me.Followings.length}
         </div>,
-        <div key="followers">
+        <div key='followers'>
           팔로워
           <br />
           {me.Followers.length}
-        </div>
+        </div>,
       ]}
     >
       <Card.Meta

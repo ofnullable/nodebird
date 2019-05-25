@@ -45,8 +45,8 @@ const AppLayout = ({ children }) => {
           {children}
         </Col>
         <Col xs={24} md={6} lg={4}>
-          <Link href='https://joonhak.github.io/react-blog'>
-            <a target='_blank'>Blog</a>
+          <Link href='https://github.com/joonhak'>
+            <a target='_blank'>Github</a>
           </Link>
         </Col>
         <Col xs={0} md={0} lg={3} />
