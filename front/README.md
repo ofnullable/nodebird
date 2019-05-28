@@ -186,7 +186,7 @@
 
     Component.getInitailProps = async context => {
       // ... do something before page laod
-    }
+    };
 
     // next-redux middleware config
     const configureStore = (initialState, options) => {
@@ -194,7 +194,7 @@
       const store = createStore(reducer, initialState, enhancer);
       store.sagaTask = sagaMiddleware.run(rootSaga);
       return store;
-    }
+    };
 
     export default withRedux(configureStore)(withReduxSaga(Component));
     ```
@@ -224,7 +224,7 @@
   - state의 불변성 유지를 위한 노력을 `덜`하게 도와주는 Library
   - ```js
     // 이전 코드
-    case SOME_ACTION: 
+    case SOME_ACTION:
       return {
         ...state,
         array: [...state.array, action.arrayData],
@@ -232,8 +232,8 @@
 
     // immer 적용 후
     import produce from 'immer'
-    
-    // export default ... 
+
+    // export default ...
     return produce(state, draft => {
       case SOME_ACTION:
         draft.array.push(action.arrayData);
@@ -241,3 +241,4 @@
     });
     ```
   - 잔 코드들이 붙어서 크게 편해보이지 않을 수 있지만 확실히 생각을 덜 할 수 있게 된다.
+    <br/>

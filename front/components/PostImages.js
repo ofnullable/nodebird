@@ -73,7 +73,7 @@ PostImages.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
       src: PropTypes.string,
-    }),
+    })
   ).isRequired,
 };
 

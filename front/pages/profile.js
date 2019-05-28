@@ -9,8 +9,8 @@ import {
   UNFOLLOW_USER_REQUEST,
   REMOVE_FOLLOWER_REQUEST,
 } from '../reducers/user';
-import PostCard from '../components/PostCard';
-import NicknameEditForm from '../components/NicknameEditForm';
+import PostCard from '../containers/PostCard';
+import NicknameEditForm from '../containers/NicknameEditForm';
 import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
 
 const Profile = () => {

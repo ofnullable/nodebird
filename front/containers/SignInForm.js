@@ -18,8 +18,8 @@ const SignInForm = memo(() => {
         type: SIGN_IN_REQUEST,
         data: {
           userId: id,
-          passwd
-        }
+          passwd,
+        },
       });
     },
     [id, passwd]
@@ -28,26 +28,26 @@ const SignInForm = memo(() => {
   return (
     <Form onSubmit={onSubmitForm}>
       <div>
-        <label htmlFor="user-id">아이디</label>
+        <label htmlFor='user-id'>아이디</label>
         <br />
-        <Input name="user-id" value={id} onChange={onChangeId} required />
+        <Input name='user-id' value={id} onChange={onChangeId} required />
       </div>
       <div>
-        <label htmlFor="passwd">비밀번호</label>
+        <label htmlFor='passwd'>비밀번호</label>
         <br />
         <Input
-          name="passwd"
+          name='passwd'
           value={passwd}
           onChange={onChangePasswd}
-          type="password"
+          type='password'
           required
         />
       </div>
       <div style={{ marginTop: '10px' }}>
-        <Button type="primary" htmlType="submit" loading={isSigningIn}>
+        <Button type='primary' htmlType='submit' loading={isSigningIn}>
           로그인
         </Button>
-        <Link href="/signup">
+        <Link href='/signup'>
           <a>
             <Button>회원가입</Button>
           </a>

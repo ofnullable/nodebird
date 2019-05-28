@@ -34,6 +34,9 @@ import {
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
   REMOVE_POST_FAILURE,
+  LOAD_POST_REQUEST,
+  LOAD_POST_SUCCESS,
+  LOAD_POST_FAILURE,
 } from '../reducers/post';
 import { ADD_POST, REMOVE_POST } from '../reducers/user';
 
@@ -124,6 +127,30 @@ function* watchRemovePost() {
   yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
 
+function loadPostApi(postId) {
+  return axios.get(`/post/${postId}`);
+}
+
+function* loadPost({ postId }) {
+  try {
+    const result = yield call(loadPostApi, postId);
+    yield put({
+      type: LOAD_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: LOAD_POST_FAILURE,
+      error: e,
+    });
+    console.error(e);
+  }
+}
+
+function* watchLoadPost() {
+  yield takeLatest(LOAD_POST_REQUEST, loadPost);
+}
+
 function loadMainPostsApi(lastId, limit = 10) {
   return axios.get(`/posts?lastId=${lastId}&limit=${limit}`);
 }
@@ -174,7 +201,7 @@ function* watchLoadUserPosts() {
 
 function loadHashtagPostsApi(tag, lastId, limit = 10) {
   return axios.get(
-    `/posts/${encodeURIComponent(tag)}?lastId=${lastId}&limit=${limit}`
+    `/posts/tag/${encodeURIComponent(tag)}?lastId=${lastId}&limit=${limit}`
   );
 }
 
@@ -356,6 +383,7 @@ export default function* postSaga() {
     fork(watchUploadImages),
     fork(watchAddPost),
     fork(watchRemovePost),
+    fork(watchLoadPost),
     fork(watchLoadMainPosts),
     fork(watchLoadUserPosts),
     fork(watchLoadHashtagPosts),

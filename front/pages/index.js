@@ -1,11 +1,13 @@
-import React, { useEffect, useCallback } from 'react';
-import PostForm from '../components/PostForm';
-import PostCard from '../components/PostCard';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux'; // redux-hook
+
+import PostForm from '../containers/PostForm';
+import PostCard from '../containers/PostCard';
 import { LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
 
 const Home = () => {
   const dispatch = useDispatch();
+  const countRef = useRef([]);
   const { me } = useSelector(state => state.user);
   const { mainPosts, hasMorePosts } = useSelector(state => state.post);
 
@@ -13,12 +15,16 @@ const Home = () => {
     if (
       hasMorePosts &&
       window.scrollY + document.documentElement.clientHeight ===
-      document.documentElement.scrollHeight
+        document.documentElement.scrollHeight
     ) {
-      dispatch({
-        type: LOAD_MAIN_POSTS_REQUEST,
-        lastId: mainPosts[mainPosts.length - 1].id,
-      });
+      const lastId = mainPosts[mainPosts.length - 1].id;
+      if (!countRef.current.includes(lastId)) {
+        dispatch({
+          type: LOAD_MAIN_POSTS_REQUEST,
+          lastId: lastId,
+        });
+        countRef.current.push(lastId);
+      }
     }
   }, [mainPosts.length, hasMorePosts]);
 
