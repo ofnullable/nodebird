@@ -231,11 +231,11 @@ function loadCommentsApi(postId) {
 
 function* loadComments(action) {
   try {
-    const result = yield call(loadCommentsApi, action.data);
+    const result = yield call(loadCommentsApi, action.postId);
     yield put({
       type: LOAD_COMMENTS_SUCCESS,
       data: {
-        postId: action.data,
+        postId: action.postId,
         comments: result.data,
       },
     });
@@ -269,7 +269,7 @@ function* addComment(action) {
       type: ADD_COMMENT_SUCCESS,
       data: {
         postId: action.data.postId,
-        comments: result.data,
+        comment: result.data,
       },
     });
   } catch (e) {

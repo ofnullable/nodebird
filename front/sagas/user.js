@@ -198,7 +198,7 @@ function* watchUnfollow() {
   yield takeLatest(UNFOLLOW_USER_REQUEST, unfollow);
 }
 
-function loadFollowersApi(userId, offset = 0, limit = 6) {
+function loadFollowersApi(userId, offset = 0, limit = 3) {
   return axios.get(
     `/user/${userId || 0}/followers?offset=${offset}&limit=${limit}`,
     {
@@ -226,7 +226,7 @@ function* watchLoadFollowers() {
   yield takeLatest(LOAD_FOLLOWERS_REQUEST, loadFollowers);
 }
 
-function loadFollowingsApi(userId, offset = 0, limit = 6) {
+function loadFollowingsApi(userId, offset = 0, limit = 3) {
   return axios.get(
     `/user/${userId || 0}/followings?offset=${offset}&limit=${limit}`,
     {

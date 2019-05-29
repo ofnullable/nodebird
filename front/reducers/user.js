@@ -128,7 +128,7 @@ export default (state = initialState, action) => {
         break;
       case LOAD_FOLLOWERS_SUCCESS:
         action.data.forEach(d => draft.followerList.push(d));
-        draft.hasMoreFollowers = action.data.length === 6;
+        draft.hasMoreFollowers = action.data.length === 3;
         break;
       case LOAD_FOLLOWINGS_REQUEST:
         draft.followingList = action.offset ? draft.followingList : [];
@@ -138,7 +138,7 @@ export default (state = initialState, action) => {
         break;
       case LOAD_FOLLOWINGS_SUCCESS:
         action.data.forEach(d => draft.followingList.push(d));
-        draft.hasMoreFollowings = action.data.length === 6;
+        draft.hasMoreFollowings = action.data.length === 3;
         break;
       case REMOVE_FOLLOWER_SUCCESS: {
         const followersIndex = draft.me.Followers.findIndex(
