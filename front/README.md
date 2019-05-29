@@ -242,3 +242,39 @@
     ```
   - 잔 코드들이 붙어서 크게 편해보이지 않을 수 있지만 확실히 생각을 덜 할 수 있게 된다.
     <br/>
+
+# 14일차
+
+- 검색기능 ( Hashtag )
+  - antd의 `Input.Search` Component에는 onSearch event를 줄 수 있다.
+  - form submit과 비슷하게 버튼 클릭 및 엔터 키 이벤트를 처리해준다
+  - `next/router`의 Router를 활용하여 value에 해당하는 hashtag 페이지로 보낸다.
+- `react-helmet`
+  - 동적인 title 및 meta tag 작성을 할 수 있게된다!
+  - 검색엔진 노출 및 url 공유 시 미리보기를 만들 수 있다!
+- Styled Component
+  - custom tag를 만드는 느낌으로다가..
+  - Component inline style과는 다르게 일반 css와 같은 문법으로 작성할 수 있다!
+  - `&`를 활용해 자식 Component의 style까지 지정해줄 수 있어서 엄-청 편함
+- packaging tips!
+  - `Component.js`와 `ComponentStyle.js`로 분리
+    - style관련한 코드들을 모듈로 분리
+    - Component의 코드가 너무 길어지는것을 방지하기 위함
+    - 너무 작은단위까지 분리하는것은 비효율적인... 것같긴하지만 일관성이ㅠ
+  - `Component(dir)` - `index.js`, `style.js`로 분리
+    - 제일 깔금한것같음
+    - directory 구조가 너무 복잡해지지 않도록 주의해야할것같다.
+  - `containers`, `components`로 분리하기
+    - action을 dispatch하는지 아닌지로 구분
+    - smart component, dumb component 라고도 부른다.
+    - ~~사실 이게 무슨 의미가 있는지...~~
+- JS tips!
+  - `+model.createdAt`
+    - createdAt의 자료형이 Date일 때 사용
+    - browser console에 `+new Date()`를 해보면 단번에 이해할 수 있음
+    - 기본적인 Date형식에서 timestamp로 변환할 수 있다.
+  - Styled-Component의 \`\`
+    - 처음 봤을 때 이게 대체 무슨 문법이지.. 했음
+    - 정식 명칭은 `Tagged Template Literal`
+    - 백틱을 통해 함수를 호출할 수 있다 `(!!!!!!!!!!)`
+    - 자세한 내용은 [zerocho님의 블로그](https://www.zerocho.com/category/ECMAScript/post/5aa7ecc772adcb001b2ed6f3)를 통해 확인하자
