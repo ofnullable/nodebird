@@ -93,6 +93,7 @@ export default (state = initialState, action) => {
       case REMOVE_POST_SUCCESS: {
         const index = draft.mainPosts.findIndex(p => p.id === action.data);
         draft.mainPosts.splice(index, 1);
+        break;
       }
       case LOAD_POST_SUCCESS:
         draft.mainPosts = [action.data];
@@ -155,6 +156,7 @@ export default (state = initialState, action) => {
       }
       case RETWEET_SUCCESS:
         draft.mainPosts.unshift(action.data);
+        break;
       default:
         break;
     }
