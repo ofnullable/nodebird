@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { LOAD_HASHTAG_POSTS_REQUEST } from '../reducers/post';
-import PostCard from '../components/PostCard';
+import PostCard from '../containers/PostCard';
 
 const Hashtag = ({ tag }) => {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const Hashtag = ({ tag }) => {
     if (
       hasMorePosts &&
       window.scrollY + document.documentElement.clientHeight ===
-      document.documentElement.scrollHeight
+        document.documentElement.scrollHeight
     ) {
       dispatch({
         type: LOAD_HASHTAG_POSTS_REQUEST,
@@ -31,7 +31,7 @@ const Hashtag = ({ tag }) => {
   return (
     <div>
       {mainPosts.map(p => (
-        <PostCard key={p.createdAt} post={p} />
+        <PostCard key={p.id} post={p} />
       ))}
     </div>
   );

@@ -9,7 +9,7 @@ import {
 
 const PostForm = () => {
   const { imagePaths, isAddingPost, postAdded } = useSelector(
-    state => state.post,
+    state => state.post
   );
   const dispatch = useDispatch();
   const [text, setText] = useState('');
@@ -45,7 +45,7 @@ const PostForm = () => {
         index,
       });
     },
-    [],
+    []
   );
 
   const onChangeText = useCallback(e => {
@@ -66,7 +66,7 @@ const PostForm = () => {
         data: formData,
       });
     },
-    [text, imagePaths],
+    [text, imagePaths]
   );
 
   return (

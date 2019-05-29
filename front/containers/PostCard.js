@@ -14,8 +14,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
-import PostImages from './PostImages';
-import PostCardContent from './PostCardContent';
+import PostImages from '../components/PostImages';
+import PostCardContent from '../components/PostCardContent';
 import {
   ADD_COMMENT_REQUEST,
   LOAD_COMMENTS_REQUEST,
@@ -128,7 +128,6 @@ const PostCard = memo(({ post }) => {
   return (
     <div style={{ marginBottom: '20px' }}>
       <Card
-        key={post.createdAt}
         cover={
           post.Images && post.Images[0] && <PostImages images={post.Images} />
         }
@@ -154,8 +153,8 @@ const PostCard = memo(({ post }) => {
                     </Button>
                   </div>
                 ) : (
-                    <Button type='danger'>신고</Button>
-                  )}
+                  <Button type='danger'>신고</Button>
+                )}
               </Button.Group>
             }
           >
@@ -166,10 +165,10 @@ const PostCard = memo(({ post }) => {
         extra={
           !me || post.UserId === me.id ? null : me.Followings &&
             me.Followings.find(f => f.id === post.User.id) ? (
-              <Button onClick={onUnfollow(post.User.id)}>언팔로우</Button>
-            ) : (
-              <Button onClick={onFollow(post.User.id)}>팔로우</Button>
-            )
+            <Button onClick={onUnfollow(post.User.id)}>언팔로우</Button>
+          ) : (
+            <Button onClick={onFollow(post.User.id)}>팔로우</Button>
+          )
         }
       >
         {post.RetweetId && post.Retweet ? (
@@ -201,21 +200,21 @@ const PostCard = memo(({ post }) => {
             />
           </Card>
         ) : (
-            <Card.Meta
-              avatar={
-                <Link
-                  href={{ pathname: `/user`, query: { id: post.User.id } }}
-                  as={`/user/${post.User.id}`}
-                >
-                  <a>
-                    <Avatar>{post.User.nickname[0]}</Avatar>
-                  </a>
-                </Link>
-              }
-              title={post.User.nickname}
-              description={<PostCardContent postContent={post.content} />}
-            />
-          )}
+          <Card.Meta
+            avatar={
+              <Link
+                href={{ pathname: `/user`, query: { id: post.User.id } }}
+                as={`/user/${post.User.id}`}
+              >
+                <a>
+                  <Avatar>{post.User.nickname[0]}</Avatar>
+                </a>
+              </Link>
+            }
+            title={post.User.nickname}
+            description={<PostCardContent postContent={post.content} />}
+          />
+        )}
       </Card>
       {commentFormOpened && (
         <div>

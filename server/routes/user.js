@@ -150,6 +150,7 @@ router.get('/:id/posts', async (req, res, next) => {
           model: db.Image,
         },
       ],
+      order: [['id', 'DESC']],
     });
     return res.json(posts);
   } catch (e) {

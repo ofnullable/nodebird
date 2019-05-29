@@ -23,6 +23,10 @@ export const ADD_POST_REQUEST = 'POST/ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'POST/ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'POST/ADD_POST_FAILURE';
 
+export const LOAD_POST_REQUEST = 'POST/LOAD_POST_REQUEST';
+export const LOAD_POST_SUCCESS = 'POST/LOAD_POST_SUCCESS';
+export const LOAD_POST_FAILURE = 'POST/LOAD_POST_FAILURE';
+
 export const LOAD_MAIN_POSTS_REQUEST = 'POST/LOAD_MAIN_POSTS_REQUEST';
 export const LOAD_MAIN_POSTS_SUCCESS = 'POST/LOAD_MAIN_POSTS_SUCCESS';
 export const LOAD_MAIN_POSTS_FAILURE = 'POST/LOAD_MAIN_POSTS_FAILURE';
@@ -90,6 +94,9 @@ export default (state = initialState, action) => {
         const index = draft.mainPosts.findIndex(p => p.id === action.data);
         draft.mainPosts.splice(index, 1);
       }
+      case LOAD_POST_SUCCESS:
+        draft.mainPosts = [action.data];
+        break;
       case LOAD_MAIN_POSTS_REQUEST:
       case LOAD_USER_POSTS_REQUEST:
       case LOAD_HASHTAG_POSTS_REQUEST:

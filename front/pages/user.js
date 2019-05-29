@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Card, Avatar } from 'antd';
 
-import PostCard from '../components/PostCard';
+import PostCard from '../containers/PostCard';
 import { LOAD_USER_REQUEST } from '../reducers/user';
 import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
 

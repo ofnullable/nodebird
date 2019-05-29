@@ -1,54 +1,24 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Slick from 'react-slick';
-import { Icon } from 'antd';
+import {
+  Overlay,
+  Header,
+  CloseIcon,
+  SlickWrapper,
+  ImageWrapper,
+  Indicator,
+} from './ImageZoomStyle';
 
 const ImageZoom = ({ images, onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   return (
-    <div
-      style={{
-        position: 'fixed',
-        zIndex: 5000,
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-      }}
-    >
-      <header
-        style={{
-          height: 44,
-          background: 'white',
-          position: 'relative',
-          padding: 0,
-          textAlign: 'center',
-        }}
-      >
-        <h1
-          style={{
-            margin: 0,
-            fontSize: '17px',
-            color: '#333',
-            lineHeight: '44px',
-          }}
-        >
-          Detail Image
-        </h1>
-        <Icon
-          type='close'
-          onClick={onClose}
-          style={{
-            position: 'absolute',
-            right: 0,
-            top: 0,
-            padding: 15,
-            lineHeight: '14px',
-            cursor: 'pointer',
-          }}
-        />
-      </header>
-      <div style={{ height: 'calc(100% - 44px)', background: '#090909' }}>
+    <Overlay>
+      <Header>
+        <h1>Detail Image</h1>
+        <CloseIcon type='close' onClick={onClose} />
+      </Header>
+      <SlickWrapper>
         <div>
           <Slick
             initialSlide={0}
@@ -59,35 +29,20 @@ const ImageZoom = ({ images, onClose }) => {
           >
             {images.map((v, i) => {
               return (
-                <div key={i} style={{ padding: 32, textAlign: 'center' }}>
-                  <img
-                    src={`http://localhost:8000/${v.src}`}
-                    style={{ margin: '0 auto', maxHeight: 750 }}
-                  />
-                </div>
+                <ImageWrapper key={i}>
+                  <img src={`http://localhost:8000/${v.src}`} />
+                </ImageWrapper>
               );
             })}
           </Slick>
-          <div style={{ textAlign: 'center' }}>
-            <div
-              style={{
-                width: 75,
-                height: 30,
-                lineHeight: '30px',
-                borderRadius: 15,
-                background: '#313131',
-                display: 'inline-block',
-                textAlign: 'center',
-                color: 'white',
-                fontSize: '15px',
-              }}
-            >
+          <Indicator>
+            <div>
               {currentSlide + 1} / {images.length}
             </div>
-          </div>
+          </Indicator>
         </div>
-      </div>
-    </div>
+      </SlickWrapper>
+    </Overlay>
   );
 };
 
@@ -95,7 +50,7 @@ ImageZoom.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
       src: PropTypes.string,
-    }),
+    })
   ).isRequired,
 };
 

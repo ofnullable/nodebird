@@ -54,7 +54,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:tag', async (req, res, next) => {
+router.get('/tag/:tag', async (req, res, next) => {
   try {
     const lastId = parseInt(req.query.lastId);
     let where = {};
