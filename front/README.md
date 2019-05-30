@@ -240,7 +240,7 @@
         break;
     });
     ```
-  - 잔 코드들이 붙어서 크게 편해보이지 않을 수 있지만 확실히 생각을 덜 할 수 있게 된다.
+  - 잔 코드들이 붙어서 크게 편해보이지 않을 수 있지만 확실히 생각을 덜 할 수 있게 된다.  
     <br/>
 
 # 14일차
@@ -277,4 +277,36 @@
     - 처음 봤을 때 이게 대체 무슨 문법이지.. 했음
     - 정식 명칭은 `Tagged Template Literal`
     - 백틱을 통해 함수를 호출할 수 있다 `(!!!!!!!!!!)`
-    - 자세한 내용은 [zerocho님의 블로그](https://www.zerocho.com/category/ECMAScript/post/5aa7ecc772adcb001b2ed6f3)를 통해 확인하자
+    - 자세한 내용은 [zerocho님의 블로그](https://www.zerocho.com/category/ECMAScript/post/5aa7ecc772adcb001b2ed6f3)를 통해 확인하자  
+      <br/>
+
+# 15일차
+
+- next - webpack 설정
+  - `webpack`
+    - `next.config.js` 파일을 통해 next의 기본 webpack 설정을 override 할 수 있다.
+    - 개발시에는 기본 설정만으로 충분하지만, 배포 시 최적화작업 등을 위해 설정한다.
+  - `@next/bundle-analyzer`
+    - module들의 file크기를 시각적으로 표현해주는 plugin
+    - 의존 package들의 크기를 확인할 수 있다.
+  - bundle 최적화
+    - bundle-analyzer를 통해 각 module의 크기등을 확인하고, 불필요한 module 제거
+    - tree shaking이라는 키워드로 검색해보면 방법을 찾을 수 있다.
+  - compression
+    - 일반 `.js`로 생성되는 파일들을 `.js.gz`의 형식으로 압축시켜준다.
+    - `?` network tab에는 그냥 `.js`로 표시되던데.. 잘 되는거 맞나ㅠ
+- 최적화
+  - form 분리
+    - form은 최적화 작업 시 첫번째로 분리하자!
+    - input들의 value가 state가 되기 때문에 꼭 분리하는것이 좋음!
+    - input끼리도 분리하는것이 원칙적으로는 좋지만 널널할때만 하자..
+  - follow 버튼
+    - follow, unfollow시 모든 게시물들이 rerender 되는것을 막자!
+    - follow, unfollow시 `me`객체를 사용하기 때문에 분리하여 최적화
+- ie support
+  - polyfill
+    - babel polyfill sciprt를 활용하여 ie도 지원할 수 있다
+    - polyfill은 없는 메서드등을 만들어주는것으로, 객체 자체가 없는것은 다른 방법을 사용해야함
+    - 또한 css는 polyfill이 없기 때문에 다른 방법을 활용해야함
+- bug fix
+  - 오타 수정 및 버그 수정

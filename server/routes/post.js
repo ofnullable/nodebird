@@ -63,10 +63,15 @@ router.post('/', isSignIn, upload.none(), async (req, res, next) => {
       include: [
         {
           model: db.User,
-          attribute: ['id', 'userId', 'nickname'],
+          attributes: ['id', 'nickname'],
         },
         {
           model: db.Image,
+        },
+        {
+          model: db.User,
+          as: 'Likers',
+          attributes: ['id'],
         },
       ],
     });

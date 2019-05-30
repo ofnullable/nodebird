@@ -5,21 +5,21 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "cross-env BUNDLE_ANALYZE=both next build",
+    "build": "cross-env ANALYZE=true NODE_ENV=production next build",
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=production next start"
   },
   "author": "joonak",
   "license": "MIT",
   "dependencies": {
-    "@zeit/next-bundle-analyzer": "^0.1.2",
-    "antd": "^3.18.2",
+    "@next/bundle-analyzer": "^8.1.0",
+    "antd": "^3.19.1",
     "axios": "^0.18.0",
     "compression-webpack-plugin": "^2.0.0",
     "cookie-parser": "^1.4.4",
     "cross-env": "^5.2.0",
     "dotenv": "^8.0.0",
-    "express": "^4.17.0",
+    "express": "^4.17.1",
     "express-session": "^1.16.1",
     "immer": "^3.1.2",
     "moment": "^2.24.0",
@@ -31,14 +31,14 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-helmet": "^5.2.1",
-    "react-redux": "^7.1.0-alpha.5",
+    "react-redux": "^7.1.0-rc.1",
     "redux": "^4.0.1",
     "redux-saga": "^1.0.2",
     "styled-components": "^4.2.0",
     "webpack-ant-icon-loader": "^1.0.5"
   },
   "devDependencies": {
-    "nodemon": "^1.19.0",
-    "webpack": "^4.32.0"
+    "nodemon": "^1.19.1",
+    "webpack": "^4.32.2"
   }
 }
