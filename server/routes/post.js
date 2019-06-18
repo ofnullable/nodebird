@@ -98,6 +98,51 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.patch('/:id', isSignIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({ where: { id: req.params.id } });
+    if (!post) {
+      return res.status(404).send('Post not fount');
+    }
+    await db.Post.update(
+      { content: req.body.content },
+      { where: { id: req.params.id } }
+    );
+    const hashtags = req.body.content.match(/#[^\s]+/g);
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map(tag =>
+          db.Hashtag.findOrCreate({
+            where: { name: tag.slice(1).toLowerCase() },
+          })
+        )
+      );
+      await post.setHashtags(result.map(r => r[0]));
+    }
+    const updatedPost = await db.Post.findOne({
+      where: { id: req.params.id },
+      include: [
+        {
+          model: db.User,
+          attributes: ['id', 'nickname'],
+        },
+        {
+          model: db.Image,
+        },
+        {
+          model: db.User,
+          as: 'Likers',
+          attributes: ['id'],
+        },
+      ],
+    });
+    return res.json(updatedPost);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
 router.delete('/:id', isSignIn, async (req, res, next) => {
   try {
     const post = await db.Post.findOne({ where: { id: req.params.id } });

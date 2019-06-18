@@ -37,6 +37,9 @@ import {
   LOAD_POST_REQUEST,
   LOAD_POST_SUCCESS,
   LOAD_POST_FAILURE,
+  EDIT_POST_REQUEST,
+  EDIT_POST_SUCCESS,
+  EDIT_POST_FAILURE,
 } from '../reducers/post';
 import { ADD_POST, REMOVE_POST } from '../reducers/user';
 
@@ -95,6 +98,36 @@ function* addPost({ data }) {
 
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
+}
+
+function EditPostApi({ postId, content }) {
+  return axios.patch(
+    `/post/${postId}`,
+    { content },
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+function* EditPost(action) {
+  try {
+    const result = yield call(EditPostApi, action);
+    yield put({
+      type: EDIT_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: EDIT_POST_FAILURE,
+      error: e,
+    });
+    console.error(e);
+  }
+}
+
+function* watchEditPost() {
+  yield takeLatest(EDIT_POST_REQUEST, EditPost);
 }
 
 function removePostApi(postId) {
@@ -382,6 +415,7 @@ export default function* postSaga() {
   yield all([
     fork(watchUploadImages),
     fork(watchAddPost),
+    fork(watchEditPost),
     fork(watchRemovePost),
     fork(watchLoadPost),
     fork(watchLoadMainPosts),
