@@ -1,5 +1,15 @@
 import React, { useState, useCallback, memo } from 'react';
-import { Card, Icon, Button, Avatar, List, Comment, Popover } from 'antd';
+import {
+  Card,
+  Icon,
+  Button,
+  Avatar,
+  List,
+  Comment,
+  Popover,
+  Modal,
+  Input,
+} from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
@@ -16,10 +26,12 @@ import {
 } from '../reducers/post';
 import CommentForm from './CommentForm';
 import FollowButton from './FollowButton';
+import PostEditModal from './PostEditModal';
 moment.locale('ko');
 
 const PostCard = memo(({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const id = useSelector(state => state.user.me && state.user.me.id);
   const dispatch = useDispatch();
 
@@ -65,15 +77,28 @@ const PostCard = memo(({ post }) => {
   }, [id, post.id]);
 
   const removePost = useCallback(postId => () => {
-    console.log(postId);
     dispatch({
       type: REMOVE_POST_REQUEST,
       data: postId,
     });
   });
 
+  const showModal = useCallback(() => {
+    setModalVisible(true);
+  });
+
+  const closeModal = useCallback(() => {
+    setModalVisible(false);
+  });
+
   return (
     <div style={{ marginBottom: '20px' }}>
+      <PostEditModal
+        visible={modalVisible}
+        closeModal={closeModal}
+        postId={post.id}
+        postContent={post.content}
+      />
       <Card
         cover={
           post.Images && post.Images[0] && <PostImages images={post.Images} />
@@ -94,7 +119,7 @@ const PostCard = memo(({ post }) => {
               <Button.Group>
                 {id && post.UserId === id ? (
                   <div>
-                    <Button>수정</Button>
+                    <Button onClick={showModal}>수정</Button>
                     <Button type='danger' onClick={removePost(post.id)}>
                       삭제
                     </Button>

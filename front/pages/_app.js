@@ -31,6 +31,7 @@ const NodeBird = ({ Component, store, pageProps }) => {
           { name: 'og:title', content: 'Nodebird' },
           { name: 'og:description', content: ' SNS - Nodebird ' },
           { property: 'og:type', content: 'website' },
+          { property: 'og:image', content: '/static/favicon.ico' },
         ]}
         link={[
           { rel: 'shortcut icon', href: '/static/favicon.ico' },
@@ -72,9 +73,9 @@ NodeBird.propTypes = {
 /* 가장 중요한 코드! */
 NodeBird.getInitialProps = async context => {
   const { ctx, Component } = context;
-  let pageProps = {};
   const state = ctx.store.getState();
   const cookie = ctx.isServer ? ctx.req.headers.cookie : '';
+  let pageProps = {};
 
   if (ctx.isServer && cookie) {
     // 모든 axios 요청에 설정된다 공통부분 설정하면 좋을듯
@@ -105,11 +106,11 @@ const configureStore = (initialState, options) => {
     process.env.NODE_ENV === 'production'
       ? compose(applyMiddleware(...middlewares))
       : compose(
-        applyMiddleware(...middlewares),
-        !options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__
-          ? window.__REDUX_DEVTOOLS_EXTENSION__()
-          : f => f
-      );
+          applyMiddleware(...middlewares),
+          !options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__
+            ? window.__REDUX_DEVTOOLS_EXTENSION__()
+            : f => f
+        );
   const store = createStore(reducer, initialState, enhancer);
   store.sagaTask = sagaMiddleware.run(rootSaga);
   return store;

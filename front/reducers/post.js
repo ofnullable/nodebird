@@ -59,10 +59,13 @@ export const RETWEET_REQUEST = 'POST/RETWEET_REQUEST';
 export const RETWEET_SUCCESS = 'POST/RETWEET_SUCCESS';
 export const RETWEET_FAILURE = 'POST/RETWEET_FAILURE';
 
+export const EDIT_POST_REQUEST = 'POST/EDIT_POST_REQUEST';
+export const EDIT_POST_SUCCESS = 'POST/EDIT_POST_SUCCESS';
+export const EDIT_POST_FAILURE = 'POST/EDIT_POST_FAILURE';
+
 export const REMOVE_POST_REQUEST = 'POST/REMOVE_POST_REQUEST';
 export const REMOVE_POST_SUCCESS = 'POST/REMOVE_POST_SUCCESS';
 export const REMOVE_POST_FAILURE = 'POST/REMOVE_POST_FAILURE';
-// 수정은 숙제
 
 export default (state = initialState, action) => {
   return produce(state, draft => {
@@ -90,6 +93,10 @@ export default (state = initialState, action) => {
         draft.isAddingPost = false;
         draft.addPostErrorReason = action.error;
         break;
+      case EDIT_POST_SUCCESS: {
+        const index = draft.mainPosts.findIndex(p => p.id === action.data.id);
+        draft.mainPosts[index] = action.data;
+      }
       case REMOVE_POST_SUCCESS: {
         const index = draft.mainPosts.findIndex(p => p.id === action.data);
         draft.mainPosts.splice(index, 1);

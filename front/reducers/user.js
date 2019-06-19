@@ -89,7 +89,7 @@ export default (state = initialState, action) => {
       case SIGN_IN_FAILURE:
         draft.me = null;
         draft.isSigningIn = false;
-        draft.signInErrorReason = action.data;
+        draft.signInErrorReason = action.reason;
         break;
       case SIGN_OUT_REQUEST:
         draft.isSigningOut = true;

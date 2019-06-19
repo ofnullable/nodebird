@@ -82,6 +82,7 @@ function* signIn({ data }) {
     console.error(e);
     yield put({
       type: SIGN_IN_FAILURE,
+      reason: e.response && e.response.data,
     });
   }
 }

@@ -2,13 +2,18 @@ import React, { useCallback, memo } from 'react';
 import Link from 'next/link';
 import { Form, Input, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { useInputText } from '../pages/signup';
 import { SIGN_IN_REQUEST } from '../reducers/user';
+
+const ErrorText = styled.div`
+  color: red;
+`;
 
 const SignInForm = memo(() => {
   const [id, onChangeId] = useInputText('');
   const [passwd, onChangePasswd] = useInputText('');
-  const { isSigningIn } = useSelector(state => state.user);
+  const { isSigningIn, signInErrorReason } = useSelector(state => state.user);
   const dispatch = useDispatch();
 
   const onSubmitForm = useCallback(
@@ -43,6 +48,7 @@ const SignInForm = memo(() => {
           required
         />
       </div>
+      <ErrorText>{signInErrorReason}</ErrorText>
       <div style={{ marginTop: '10px' }}>
         <Button type='primary' htmlType='submit' loading={isSigningIn}>
           로그인
