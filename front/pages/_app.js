@@ -23,8 +23,7 @@ const NodeBird = ({ Component, store, pageProps }) => {
           { charSet: 'UTF-8' },
           {
             name: 'viewport',
-            content:
-              'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+            content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
           },
           { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
           { name: 'description', content: ' SNS - Nodebird ' },
@@ -37,24 +36,20 @@ const NodeBird = ({ Component, store, pageProps }) => {
           { rel: 'shortcut icon', href: '/static/favicon.ico' },
           {
             rel: 'stylesheet',
-            href:
-              'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css',
+            href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css',
           },
           {
             rel: 'stylesheet',
-            href:
-              'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css',
+            href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css',
           },
           {
             rel: 'stylesheet',
-            href:
-              'https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.6/antd.min.css',
+            href: 'https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.6/antd.min.css',
           },
         ]}
         script={[
           {
-            src:
-              'https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.6/antd.min.js',
+            src: 'https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.6/antd.min.js',
           },
         ]}
       />
@@ -81,6 +76,7 @@ NodeBird.getInitialProps = async context => {
     // 모든 axios 요청에 설정된다 공통부분 설정하면 좋을듯
     axios.defaults.headers.cookie = cookie;
   }
+  console.log(state);
   if (!state.user.me) {
     ctx.store.dispatch({
       type: LOAD_USER_REQUEST,
