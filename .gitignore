@@ -1,4 +1,5 @@
 .next/
+.nuxt/
 bundles/
 node_modules/
 uploads/
