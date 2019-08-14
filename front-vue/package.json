@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint **/*",
     "dev": "nuxt"
   },
   "author": "joonak",
@@ -15,5 +16,9 @@
     "nuxt": "^2.8.1",
     "vue": "^2.6.10",
     "vuetify": "^2.0.5"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-plugin-vue": "^5.2.3"
   }
 }

@@ -1,8 +1,6 @@
 module.exports = {
-  head: {
-    title: 'nuxt head',
-  },
-  modules: ['@nuxtjs/vuetify'],
+  modules: ['@nuxtjs/axios'],
+  devModules: ['@nuxtjs/vuetify'],
   plugins: [],
   vuetify: {},
 };
