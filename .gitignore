@@ -1,5 +1,5 @@
 .next/
-.nuxt/
+.prettierignore
 bundles/
 node_modules/
 uploads/
