@@ -76,7 +76,7 @@ NodeBird.getInitialProps = async context => {
     // 모든 axios 요청에 설정된다 공통부분 설정하면 좋을듯
     axios.defaults.headers.cookie = cookie;
   }
-  console.log(state);
+
   if (!state.user.me) {
     ctx.store.dispatch({
       type: LOAD_USER_REQUEST,
