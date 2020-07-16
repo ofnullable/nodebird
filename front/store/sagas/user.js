@@ -1,12 +1,5 @@
 import axios from 'axios';
-import {
-  all,
-  call,
-  put,
-  fork,
-  takeLatest,
-  takeEvery,
-} from 'redux-saga/effects';
+import { all, call, put, fork, takeLatest, takeEvery } from 'redux-saga/effects';
 import {
   SIGN_IN_REQUEST,
   SIGN_IN_SUCCESS,
@@ -200,12 +193,9 @@ function* watchUnfollow() {
 }
 
 function loadFollowersApi(userId, offset = 0, limit = 3) {
-  return axios.get(
-    `/user/${userId || 0}/followers?offset=${offset}&limit=${limit}`,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.get(`/user/${userId || 0}/followers?offset=${offset}&limit=${limit}`, {
+    withCredentials: true,
+  });
 }
 
 function* loadFollowers(action) {
@@ -228,12 +218,9 @@ function* watchLoadFollowers() {
 }
 
 function loadFollowingsApi(userId, offset = 0, limit = 3) {
-  return axios.get(
-    `/user/${userId || 0}/followings?offset=${offset}&limit=${limit}`,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.get(`/user/${userId || 0}/followings?offset=${offset}&limit=${limit}`, {
+    withCredentials: true,
+  });
 }
 
 function* loadFollowings(action) {

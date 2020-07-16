@@ -3,7 +3,7 @@ import { Form, Input, Checkbox, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import Router from 'next/router';
 import styled from 'styled-components';
-import { SIGN_UP_REQUEST } from '../reducers/user';
+import { SIGN_UP_REQUEST } from '../store/reducers/user';
 
 const ErrorText = styled.div`
   color: red;
@@ -12,7 +12,7 @@ const ErrorText = styled.div`
 // custom hooks
 export const useInputText = (initValue = null) => {
   const [value, setter] = useState(initValue);
-  const handler = useCallback(e => {
+  const handler = useCallback((e) => {
     setter(e.target.value);
   }, []);
   return [value, handler];
@@ -27,7 +27,7 @@ const Signup = () => {
   const [term, setTerm] = useState(false);
   const [passwdError, setPasswdError] = useState(false);
   const [termError, setTermError] = useState(false);
-  const { isSigningUp, me } = useSelector(state => state.user);
+  const { isSigningUp, me } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (me) {
@@ -37,7 +37,7 @@ const Signup = () => {
   }, [me && me.id]);
 
   const onSubmit = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       if (passwd !== passwdCheck) {
         setPasswdError(true);
@@ -69,7 +69,7 @@ const Signup = () => {
   };
   */
   const onChangePasswd = useCallback(
-    e => {
+    (e) => {
       setPasswdError(e.target.value !== passwdCheck);
       setPasswd(e.target.value);
     },
@@ -77,7 +77,7 @@ const Signup = () => {
   );
 
   const onChangePasswdCheck = useCallback(
-    e => {
+    (e) => {
       setPasswdError(e.target.value !== passwd);
       setPasswdCheck(e.target.value);
     },
@@ -85,7 +85,7 @@ const Signup = () => {
   );
 
   const onChangeTerm = useCallback(
-    e => {
+    (e) => {
       setTermError(false);
       setTerm(e.target.checked);
     },
@@ -100,55 +100,48 @@ const Signup = () => {
     <>
       <Form onSubmit={onSubmit} style={{ padding: 10 }}>
         <div>
-          <label htmlFor='user-id'>아이디</label>
+          <label htmlFor="user-id">아이디</label>
           <br />
-          <Input name='user-id' value={id} onChange={onChangeId} required />
+          <Input name="user-id" value={id} onChange={onChangeId} required />
         </div>
         <div>
-          <label htmlFor='user-nick'>닉네임</label>
+          <label htmlFor="user-nick">닉네임</label>
           <br />
-          <Input
-            name='user-nick'
-            value={nick}
-            onChange={onChangeNick}
-            required
-          />
+          <Input name="user-nick" value={nick} onChange={onChangeNick} required />
         </div>
         <div>
-          <label htmlFor='user-passwd'>비밀번호</label>
+          <label htmlFor="user-passwd">비밀번호</label>
           <br />
           <Input
-            name='user-passwd'
-            type='password'
+            name="user-passwd"
+            type="password"
             value={passwd}
             required
             onChange={onChangePasswd}
           />
         </div>
         <div>
-          <label htmlFor='user-passwd-check'>비밀번호 확인</label>
+          <label htmlFor="user-passwd-check">비밀번호 확인</label>
           <br />
           <Input
-            name='user-passwd-check'
-            type='password'
+            name="user-passwd-check"
+            type="password"
             value={passwdCheck}
             required
             onChange={onChangePasswdCheck}
           />
           {passwdError && (
-            <ErrorText style={{ color: 'red' }}>
-              비밀번호가 일치하지 않습니다!
-            </ErrorText>
+            <ErrorText style={{ color: 'red' }}>비밀번호가 일치하지 않습니다!</ErrorText>
           )}
         </div>
         <div>
-          <Checkbox name='user-term' value={term} onChange={onChangeTerm}>
+          <Checkbox name="user-term" value={term} onChange={onChangeTerm}>
             동의!
           </Checkbox>
           {termError && <ErrorText>약관에 동의해주세요!</ErrorText>}
         </div>
         <div style={{ marginTop: 10 }}>
-          <Button type='primary' htmlType='submit' loading={isSigningUp}>
+          <Button type="primary" htmlType="submit" loading={isSigningUp}>
             가입하기
           </Button>
         </div>

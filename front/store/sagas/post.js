@@ -233,9 +233,7 @@ function* watchLoadUserPosts() {
 }
 
 function loadHashtagPostsApi(tag, lastId, limit = 10) {
-  return axios.get(
-    `/posts/tag/${encodeURIComponent(tag)}?lastId=${lastId}&limit=${limit}`
-  );
+  return axios.get(`/posts/tag/${encodeURIComponent(tag)}?lastId=${lastId}&limit=${limit}`);
 }
 
 function* loadHashtagPosts(action) {

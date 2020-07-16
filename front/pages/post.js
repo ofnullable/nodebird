@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
-import { LOAD_POST_REQUEST } from '../reducers/post';
+import { LOAD_POST_REQUEST } from '../store/reducers/post';
 
 const Post = ({ id }) => {
-  const { mainPosts } = useSelector(state => state.post);
+  const { mainPosts } = useSelector((state) => state.post);
   return (
     <>
       <Helmet
@@ -36,7 +36,7 @@ const Post = ({ id }) => {
   );
 };
 
-Post.getInitialProps = async context => {
+Post.getInitialProps = async (context) => {
   context.store.dispatch({
     type: LOAD_POST_REQUEST,
     postId: context.query.id,

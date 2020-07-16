@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
 import Router from 'next/router';
 
@@ -7,21 +8,18 @@ import {
   LOAD_FOLLOWINGS_REQUEST,
   UNFOLLOW_USER_REQUEST,
   REMOVE_FOLLOWER_REQUEST,
-} from '../reducers/user';
-import PostCard from '../containers/PostCard';
-import NicknameEditForm from '../containers/NicknameEditForm';
-import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
+} from '../store/reducers/user';
+import PostCard from '../components/PostCard';
+import NicknameEditForm from '../components/NicknameEditForm';
+import { LOAD_USER_POSTS_REQUEST } from '../store/reducers/post';
 import FollowList from '../components/FollowList';
 
 const Profile = () => {
-  const {
-    followerList,
-    followingList,
-    hasMoreFollowers,
-    hasMoreFollowings,
-  } = useSelector(state => state.user);
-  const { me } = useSelector(state => state.user);
-  const { mainPosts } = useSelector(state => state.post);
+  const { followerList, followingList, hasMoreFollowers, hasMoreFollowings } = useSelector(
+    (state) => state.user
+  );
+  const { me } = useSelector((state) => state.user);
+  const { mainPosts } = useSelector((state) => state.post);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,7 +30,7 @@ const Profile = () => {
   }, []);
 
   const unfollowUser = useCallback(
-    userId => () => {
+    (userId) => () => {
       dispatch({
         type: UNFOLLOW_USER_REQUEST,
         data: userId,
@@ -42,7 +40,7 @@ const Profile = () => {
   );
 
   const removeFollower = useCallback(
-    userId => () => {
+    (userId) => () => {
       dispatch({
         type: REMOVE_FOLLOWER_REQUEST,
         data: userId,
@@ -71,23 +69,26 @@ const Profile = () => {
 
   return (
     <div>
+      <Head>
+        <title>내 프로필 | nodebird</title>
+      </Head>
       <NicknameEditForm />
       <FollowList
-        header='팔로잉'
+        header="팔로잉"
         hasMore={hasMoreFollowings}
         loadMore={loadMoreFollowings}
         data={followingList}
         remove={unfollowUser}
       />
       <FollowList
-        header='팔로워'
+        header="팔로워"
         hasMore={hasMoreFollowers}
         loadMore={loadMoreFollowers}
         data={followerList}
         remove={removeFollower}
       />
       <div>
-        {mainPosts.map(p => (
+        {mainPosts.map((p) => (
           <PostCard key={p.id} post={p} />
         ))}
       </div>
@@ -95,7 +96,7 @@ const Profile = () => {
   );
 };
 
-Profile.getInitialProps = async context => {
+Profile.getInitialProps = async (context) => {
   const state = context.store.getState();
 
   context.store.dispatch({

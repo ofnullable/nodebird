@@ -4,13 +4,13 @@ import Router from 'next/router';
 import { Menu, Input, Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import SignInForm from '../containers/SignInForm';
-import UserProfile from '../containers/UserProfile';
+import SignInForm from './SignInForm';
+import UserProfile from './UserProfile';
 
 const AppLayout = ({ children }) => {
-  const { me } = useSelector(state => state.user);
+  const { me } = useSelector((state) => state.user);
 
-  const onSearch = value => {
+  const onSearch = (value) => {
     Router.push(
       { pathname: '/hashtag', query: { tag: encodeURIComponent(value) } },
       `/hashtag/${encodeURIComponent(value)}`
@@ -19,23 +19,19 @@ const AppLayout = ({ children }) => {
 
   return (
     <div>
-      <Menu mode='horizontal'>
-        <Menu.Item key='home'>
-          <Link href='/'>
+      <Menu mode="horizontal">
+        <Menu.Item key="home">
+          <Link href="/">
             <a>NodeBird</a>
           </Link>
         </Menu.Item>
-        <Menu.Item key='profile'>
-          <Link href='/profile'>
+        <Menu.Item key="profile">
+          <Link href="/profile">
             <a>Profile</a>
           </Link>
         </Menu.Item>
-        <Menu.Item key='mail'>
-          <Input.Search
-            enterButton
-            style={{ verticalAlign: 'middle' }}
-            onSearch={onSearch}
-          />
+        <Menu.Item key="mail">
+          <Input.Search enterButton style={{ verticalAlign: 'middle' }} onSearch={onSearch} />
         </Menu.Item>
       </Menu>
       <Row gutter={16} style={{ margin: '10px' }}>
@@ -47,9 +43,9 @@ const AppLayout = ({ children }) => {
           {children}
         </Col>
         <Col xs={24} md={6} lg={4}>
-          <Link href='https://github.com/joonhak'>
-            <a target='_blank'>Github</a>
-          </Link>
+          <a href="https://github.com/joonhak" target="_blank" rel="noreferrer">
+            Github
+          </a>
         </Col>
         <Col xs={0} md={0} lg={3} />
       </Row>
@@ -58,7 +54,7 @@ const AppLayout = ({ children }) => {
 };
 
 AppLayout.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 };
 
 export default AppLayout;

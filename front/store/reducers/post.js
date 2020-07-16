@@ -68,7 +68,7 @@ export const REMOVE_POST_SUCCESS = 'POST/REMOVE_POST_SUCCESS';
 export const REMOVE_POST_FAILURE = 'POST/REMOVE_POST_FAILURE';
 
 export default (state = initialState, action) => {
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     switch (action.type) {
       case REMOVE_IMAGE: {
         const index = draft.imagePaths.findIndex((v, i) => i === action.index);
@@ -76,7 +76,7 @@ export default (state = initialState, action) => {
         break;
       }
       case UPLOAD_IMAGES_SUCCESS:
-        action.data.forEach(d => draft.imagePaths.push(d));
+        action.data.forEach((d) => draft.imagePaths.push(d));
         break;
       case ADD_POST_REQUEST:
         draft.postAdded = false;
@@ -94,11 +94,12 @@ export default (state = initialState, action) => {
         draft.addPostErrorReason = action.error;
         break;
       case EDIT_POST_SUCCESS: {
-        const index = draft.mainPosts.findIndex(p => p.id === action.data.id);
+        const index = draft.mainPosts.findIndex((p) => p.id === action.data.id);
         draft.mainPosts[index] = action.data;
+        break;
       }
       case REMOVE_POST_SUCCESS: {
-        const index = draft.mainPosts.findIndex(p => p.id === action.data);
+        const index = draft.mainPosts.findIndex((p) => p.id === action.data);
         draft.mainPosts.splice(index, 1);
         break;
       }
@@ -114,15 +115,13 @@ export default (state = initialState, action) => {
       case LOAD_MAIN_POSTS_SUCCESS:
       case LOAD_USER_POSTS_SUCCESS:
       case LOAD_HASHTAG_POSTS_SUCCESS:
-        action.data.forEach(d => {
+        action.data.forEach((d) => {
           draft.mainPosts.push(d);
         });
         draft.hasMorePosts = action.data.length === 10;
         break;
       case LOAD_COMMENTS_SUCCESS: {
-        const postIndex = draft.mainPosts.findIndex(
-          p => p.id === action.data.postId
-        );
+        const postIndex = draft.mainPosts.findIndex((p) => p.id === action.data.postId);
         draft.mainPosts[postIndex].Comments = action.data.comments;
         break;
       }
@@ -132,9 +131,7 @@ export default (state = initialState, action) => {
         draft.commentAdded = false;
         break;
       case ADD_COMMENT_SUCCESS: {
-        const postIndex = draft.mainPosts.findIndex(
-          p => p.id === action.data.postId
-        );
+        const postIndex = draft.mainPosts.findIndex((p) => p.id === action.data.postId);
         draft.mainPosts[postIndex].Comments.push(action.data.comment);
         draft.isAddingComment = false;
         draft.commentAdded = true;
@@ -145,18 +142,14 @@ export default (state = initialState, action) => {
         draft.addCommentErrorReason = action.error;
         break;
       case LIKE_POST_SUCCESS: {
-        const postIndex = draft.mainPosts.findIndex(
-          p => p.id === action.data.postId
-        );
+        const postIndex = draft.mainPosts.findIndex((p) => p.id === action.data.postId);
         draft.mainPosts[postIndex].Likers.unshift({ id: action.data.userId });
         break;
       }
       case UNLIKE_POST_SUCCESS: {
-        const postIndex = draft.mainPosts.findIndex(
-          p => p.id === action.data.postId
-        );
+        const postIndex = draft.mainPosts.findIndex((p) => p.id === action.data.postId);
         const likeIndex = draft.mainPosts[postIndex].Likers.findIndex(
-          l => l.id === action.data.userId
+          (l) => l.id === action.data.userId
         );
         draft.mainPosts[postIndex].Likers.splice(likeIndex, 1);
         break;
