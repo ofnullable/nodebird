@@ -62,7 +62,7 @@ export const EDIT_NICKNAME_FAILURE = 'USER/EDIT_NICKNAME_FAILURE';
 
 // reducer, setState와 비슷하다고 생각하면 된다.
 export default (state = initialState, action) => {
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     switch (action.type) {
       case SIGN_UP_REQUEST:
         draft.isSignedUp = false;
@@ -112,13 +112,9 @@ export default (state = initialState, action) => {
         draft.me.Followings.unshift({ id: action.data });
         break;
       case UNFOLLOW_USER_SUCCESS: {
-        const followingsIndex = draft.me.Followings.findIndex(
-          f => f.id === action.data
-        );
+        const followingsIndex = draft.me.Followings.findIndex((f) => f.id === action.data);
         draft.me.Followings.splice(followingsIndex, 1);
-        const followingListIndex = draft.followingList.findIndex(
-          f => f.id === action.data
-        );
+        const followingListIndex = draft.followingList.findIndex((f) => f.id === action.data);
         draft.followingList.splice(followingListIndex, 1);
         break;
       }
@@ -127,27 +123,21 @@ export default (state = initialState, action) => {
         draft.hasMoreFollowers = action.offset ? draft.hasMoreFollowers : true;
         break;
       case LOAD_FOLLOWERS_SUCCESS:
-        action.data.forEach(d => draft.followerList.push(d));
+        action.data.forEach((d) => draft.followerList.push(d));
         draft.hasMoreFollowers = action.data.length === 3;
         break;
       case LOAD_FOLLOWINGS_REQUEST:
         draft.followingList = action.offset ? draft.followingList : [];
-        draft.hasMoreFollowings = action.offset
-          ? draft.hasMoreFollowings
-          : true;
+        draft.hasMoreFollowings = action.offset ? draft.hasMoreFollowings : true;
         break;
       case LOAD_FOLLOWINGS_SUCCESS:
-        action.data.forEach(d => draft.followingList.push(d));
+        action.data.forEach((d) => draft.followingList.push(d));
         draft.hasMoreFollowings = action.data.length === 3;
         break;
       case REMOVE_FOLLOWER_SUCCESS: {
-        const followersIndex = draft.me.Followers.findIndex(
-          f => f.id === action.data
-        );
+        const followersIndex = draft.me.Followers.findIndex((f) => f.id === action.data);
         draft.me.Followers.splice(followersIndex, 1);
-        const followerListIndex = draft.followerList.findIndex(
-          f => f.id === action.data
-        );
+        const followerListIndex = draft.followerList.findIndex((f) => f.id === action.data);
         draft.followerList.splice(followerListIndex, 1);
         break;
       }
@@ -163,7 +153,7 @@ export default (state = initialState, action) => {
         draft.me.Posts.unshift({ id: action.data });
         break;
       case REMOVE_POST: {
-        const index = draft.me.Posts.findIndex(p => p.id === action.data);
+        const index = draft.me.Posts.findIndex((p) => p.id === action.data);
         draft.me.Posts.splice(index, 1);
         break;
       }
