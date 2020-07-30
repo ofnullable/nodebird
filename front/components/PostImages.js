@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import ImageZoom from './ImageZoom';
 
 const PostImages = ({ images }) => {
@@ -17,38 +17,22 @@ const PostImages = ({ images }) => {
   if (images.length === 1) {
     return (
       <div>
-        <img
-          src={`http://localhost:8000/${images[0].src}`}
-          onClick={zoomImage}
-          width='100%'
-        />
+        <img src={`http://localhost:8000/${images[0].src}`} onClick={zoomImage} width="100%" />
         {showZoomImage && <ImageZoom images={images} onClose={onClose} />}
       </div>
     );
   } else if (images.length === 2) {
     return (
       <div>
-        <img
-          src={`http://localhost:8000/${images[0].src}`}
-          width='50%'
-          onClick={zoomImage}
-        />
-        <img
-          src={`http://localhost:8000/${images[1].src}`}
-          width='50%'
-          onClick={zoomImage}
-        />
+        <img src={`http://localhost:8000/${images[0].src}`} width="50%" onClick={zoomImage} />
+        <img src={`http://localhost:8000/${images[1].src}`} width="50%" onClick={zoomImage} />
         {showZoomImage && <ImageZoom images={images} onClose={onClose} />}
       </div>
     );
   }
   return (
     <div>
-      <img
-        src={`http://localhost:8000/${images[0].src}`}
-        width='50%'
-        onClick={zoomImage}
-      />
+      <img src={`http://localhost:8000/${images[0].src}`} width="50%" onClick={zoomImage} />
       <div
         style={{
           display: 'inline-block',
@@ -59,7 +43,7 @@ const PostImages = ({ images }) => {
         }}
         onClick={zoomImage}
       >
-        <Icon type='plus' />
+        <PlusCircleOutlined />
         <br />
         {images.length - 1}
         개의 사진 더 보기
