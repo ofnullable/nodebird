@@ -49,6 +49,7 @@ Home.getInitialProps = async (context) => {
   context.store.dispatch({
     type: LOAD_MAIN_POSTS_REQUEST,
   });
+  return {};
 };
 
 export default Home;

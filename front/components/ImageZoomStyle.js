@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Icon } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
 
 export const Overlay = styled.div`
   position: fixed;
@@ -25,7 +25,7 @@ export const Header = styled.header`
   }
 `;
 
-export const CloseIcon = styled(Icon)`
+export const CloseIcon = styled(CloseOutlined)`
   position: absolute;
   right: 0;
   top: 0;

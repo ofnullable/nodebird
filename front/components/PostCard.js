@@ -1,8 +1,15 @@
 import React, { useState, useCallback } from 'react';
-import { Card, Icon, Button, Avatar, List, Comment, Popover } from 'antd';
+import Link from 'next/link';
+import {
+  RetweetOutlined,
+  HeartOutlined,
+  HeartTwoTone,
+  MessageOutlined,
+  EllipsisOutlined,
+} from '@ant-design/icons';
+import { Card, Button, Avatar, List, Comment, Popover } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
 import moment from 'moment';
 
 import PostImages from './PostImages';
@@ -92,15 +99,13 @@ const PostCard = ({ post }) => {
       <Card
         cover={post.Images && post.Images[0] && <PostImages images={post.Images} />}
         actions={[
-          <Icon type="retweet" key="retweet" onClick={onRetweet} />,
-          <Icon
-            type="heart"
-            key="heart"
-            onClick={toggleLike}
-            theme={liked ? 'twoTone' : 'outlined'}
-            twoToneColor="#eb2f96"
-          />,
-          <Icon type="message" key="message" onClick={toggleCommentForm} />,
+          <RetweetOutlined key="retweet" onClick={onRetweet} />,
+          liked ? (
+            <HeartTwoTone twoToneColor="#eb2f96" key="heart" onClick={toggleLike} />
+          ) : (
+            <HeartOutlined key="heart" onClick={toggleLike} />
+          ),
+          <MessageOutlined key="message" onClick={toggleCommentForm} />,
           <Popover
             key="ellipsis"
             content={
@@ -118,7 +123,7 @@ const PostCard = ({ post }) => {
               </Button.Group>
             }
           >
-            <Icon type="ellipsis" />
+            <EllipsisOutlined />
           </Popover>,
         ]}
         title={post.RetweetId ? `${post.User.nickname}님이 Retweet` : null}

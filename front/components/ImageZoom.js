@@ -16,13 +16,13 @@ const ImageZoom = ({ images, onClose }) => {
     <Overlay>
       <Header>
         <h1>Detail Image</h1>
-        <CloseIcon type='close' onClick={onClose} />
+        <CloseIcon type="close" onClick={onClose} />
       </Header>
       <SlickWrapper>
         <div>
           <Slick
             initialSlide={0}
-            afterChange={silde => setCurrentSlide(silde)}
+            afterChange={(silde) => setCurrentSlide(silde)}
             infinite={false}
             slidesToShow={1}
             slidesToScroll={1}
@@ -52,6 +52,7 @@ ImageZoom.propTypes = {
       src: PropTypes.string,
     })
   ).isRequired,
+  onClose: PropTypes.func,
 };
 
 export default ImageZoom;
